@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contact Book My Kahani</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c5aa0;
+            color: white;
+            padding: 28px 25px;
+            text-align: center;
+        }
+
+        .header h1 { font-size: 1.9em; margin-bottom: 6px; }
+        .header p { opacity: 0.95; }
+
+        .contact-info { padding: 22px; }
+
+        .contact-item {
+            margin: 14px 0;
+            padding: 14px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #2c5aa0;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            min-height: 48px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        }
+
+        .contact-body { flex: 1; }
+        .contact-item h3 {
+            color: #2c5aa0;
+            margin-bottom: 6px;
+            font-size: 1.15em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-item p { color: #333; font-size: 0.98em; }
+
+        a.link {
+            color: #2c5aa0;
+            text-decoration: none;
+            font-weight: 700;
+        }
+        a.link:hover { text-decoration: underline; }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 0;
+            cursor: pointer;
+            background: #2c5aa0;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .btn.ghost {
+            background: transparent;
+            color: #2c5aa0;
+            border: 1px solid rgba(44,90,160,0.12);
+        }
+
+        .small {
+            font-size: 0.92em;
+            opacity: 0.95;
+        }
+
+        /* Responsive */
+        @media (max-width:480px) {
+            .container { margin: 0 8px; }
+            .header { padding: 20px; }
+            .header h1 { font-size: 1.5em; }
+            .icon { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" role="main" aria-labelledby="contact-heading">
+    <div class="header">
+        <h1 id="contact-heading">📞 Contact Book My Kahani</h1>
+        <p>We're here to help — reach out via Email, WhatsApp or Telegram.</p>
+    </div>
+
+    <div class="contact-info">
+
+        <!-- PHONE -->
+        <div class="contact-item" aria-label="Phone">
+            <div class="icon" aria-hidden="true">
+                <!-- phone SVG -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15.46V20a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2 5.18 2 2 0 0 1 4 3h4.54a1 1 0 0 1 1 .75l1.1 4.33a1 1 0 0 1-.25.95L9.91 11.09a12.13 12.13 0 0 0 6 6l1.06-1.06a1 1 0 0 1 .94-.26L20.25 18a1 1 0 0 1 .75 1z" stroke="#2c5aa0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="contact-body">
+                <h3>📞 Phone</h3>
+                <p class="small">Main contact: <a class="link" href="tel:+918758141053">+91 87581 41053</a></p>
+                <div class="actions">
+                    <a class="btn" href="tel:+918758141053" aria-label="Call +91 8758141053">
+                        Call
+                    </a>
+                    <button class="btn ghost" onclick="copyToClipboard('+918758141053')" aria-label="Copy phone number">Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="contact-item" aria-label="Email">
+            <div class="icon" aria-hidden="true">
+                <!-- mail SVG -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 8.5v7A2.5 2.5 0 0 0 5.5 18h13A2.5 2.5 0 0 0 21 15.5v-7" stroke="#2c5aa0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 8.5L12 13 3 8.5" stroke="#2c5aa0" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="contact-body">
+                <h3>📧 Email</h3>
+                <p class="small">General inquiries: <a class="link" href="mailto:bookmykahani@gmail.com">bookmykahani@gmail.com</a></p>
+                <div class="actions">
+                    <a class="btn" href="mailto:bookmykahani@gmail.com" aria-label="Send email to bookmykahani@gmail.com">Email Us</a>
+                    <button class="btn ghost" onclick="copyToClipboard('bookmykahani@gmail.com')" aria-label="Copy email">Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- WHATSAPP -->
+        <div class="contact-item" aria-label="WhatsApp">
+            <div class="icon" aria-hidden="true">
+                <!-- whatsapp SVG -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21.6 18.2a11.94 11.94 0 0 0 0-12.4A12 12 0 1 0 12 24v-4.4a9.6 9.6 0 0 1 9.6-9.6h0" stroke="#2c5aa0" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17.7 14.2c-.5-.2-2.9-1.4-3.3-1.6-.4-.2-.6-.3-.9.3s-1.1 1.6-1.3 1.9c-.2.3-.4.4-.9.1-1.8-.9-3-1.7-4.2-3.8-.3-.6.3-.5.8-1.5.1-.3 0-.6-.1-.8-.2-.3-1.3-3-1.8-4.1-.5-1.1-1-1 0-1.5.8-.4 2.3-.2 3.1.1 1.1.4 1.9 1.3 2.5 2.1.6.8 1.1 1.6 1.5 2.2.4.6.5 1 .3 1.2-.2.2-1.1.9-1.6 1.2" stroke="#2c5aa0" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="contact-body">
+                <h3>💬 WhatsApp</h3>
+                <p class="small">Chat on WhatsApp: <a class="link" href="https://wa.me/918758141053" target="_blank" rel="noopener">+91 87581 41053</a></p>
+                <div class="actions">
+                    <a class="btn" href="https://wa.me/918758141053" target="_blank" rel="noopener" aria-label="Open WhatsApp chat">Open Chat</a>
+                    <button class="btn ghost" onclick="copyToClipboard('+918758141053')" aria-label="Copy WhatsApp number">Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELEGRAM -->
+        <div class="contact-item" aria-label="Telegram">
+            <div class="icon" aria-hidden="true">
+                <!-- telegram SVG -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 4L2 12.01l4.9 1.9L9.6 20 12 15l10-11z" stroke="#2c5aa0" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+            </div>
+            <div class="contact-body">
+                <h3>✈️ Telegram</h3>
+                <p class="small">Telegram contact: <span class="link" style="cursor:default">+91 87581 41053</span></p>
+                <div class="actions">
+                    <!-- Attempts to open Telegram app first; falls back to web link -->
+                    <a class="btn" href="#" onclick="openTelegram(event)" aria-label="Open Telegram chat">Open in Telegram</a>
+                    <button class="btn ghost" onclick="copyToClipboard('+918758141053')" aria-label="Copy Telegram number">Copy</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Copy to clipboard helper
+    function copyToClipboard(text) {
+        if (!text) return;
+        navigator.clipboard?.writeText(text).then(() => {
+            alert('Copied: ' + text);
+        }).catch(() => {
+            // fallback
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); alert('Copied: ' + text); } catch(e){ alert('Copy failed, please select and copy manually.'); }
+            ta.remove();
+        });
+    }
+
+    // Telegram open: try app protocol then fallback to web
+    function openTelegram(e) {
+        e.preventDefault();
+        const phone = '+918758141053';
+        // Try native Telegram protocol
+        const tgProtocol = `tg://resolve?phone=${encodeURIComponent(phone)}`;
+        const webFallback = `https://t.me/+${phone.replace(/\D/g, '')}`;
+        // First try to open tg://
+        window.location = tgProtocol;
+        // If after 600ms user hasn't been redirected (app not installed), open fallback
+        setTimeout(() => {
+            window.open(webFallback, '_blank', 'noopener');
+        }, 600);
+    }
+
+    // Minor click effect for links (visual feedback)
+    document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', function() {
+            this.style.opacity = '0.85';
+            setTimeout(()=> this.style.opacity = '', 180);
+        });
+    });
+
+    console.log('Contact Book My Kahani loaded');
+</script>
+</body>
+</html>
