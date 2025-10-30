@@ -13,19 +13,19 @@
 },{}],2:[function(_dereq_,module,exports){
 (function (global){
 var topLevel = typeof global !== 'undefined' ? global :
-    typeof window !== 'undefined' ? window : {}
+		typeof window !== 'undefined' ? window : {}
 var minDoc = _dereq_(1);
 
 var doccy;
 
 if (typeof document !== 'undefined') {
-    doccy = document;
+	doccy = document;
 } else {
-    doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'];
+	doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'];
 
-    if (!doccy) {
-        doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'] = minDoc;
-    }
+	if (!doccy) {
+		doccy = topLevel['__GLOBAL_DOCUMENT_CACHE@4'] = minDoc;
+	}
 }
 
 module.exports = doccy;
@@ -36,13 +36,13 @@ module.exports = doccy;
 var win;
 
 if (typeof window !== "undefined") {
-    win = window;
+		win = window;
 } else if (typeof global !== "undefined") {
-    win = global;
+		win = global;
 } else if (typeof self !== "undefined"){
-    win = self;
+		win = self;
 } else {
-    win = {};
+		win = {};
 }
 
 module.exports = win;
@@ -51,235 +51,235 @@ module.exports = win;
 },{}],4:[function(_dereq_,module,exports){
 (function (root) {
 
-  // Store setTimeout reference so promise-polyfill will be unaffected by
-  // other code modifying setTimeout (like sinon.useFakeTimers())
-  var setTimeoutFunc = setTimeout;
+	// Store setTimeout reference so promise-polyfill will be unaffected by
+	// other code modifying setTimeout (like sinon.useFakeTimers())
+	var setTimeoutFunc = setTimeout;
 
-  function noop() {}
-  
-  // Polyfill for Function.prototype.bind
-  function bind(fn, thisArg) {
-    return function () {
-      fn.apply(thisArg, arguments);
-    };
-  }
+	function noop() {}
+	
+	// Polyfill for Function.prototype.bind
+	function bind(fn, thisArg) {
+		return function () {
+			fn.apply(thisArg, arguments);
+		};
+	}
 
-  function Promise(fn) {
-    if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new');
-    if (typeof fn !== 'function') throw new TypeError('not a function');
-    this._state = 0;
-    this._handled = false;
-    this._value = undefined;
-    this._deferreds = [];
+	function Promise(fn) {
+		if (typeof this !== 'object') throw new TypeError('Promises must be constructed via new');
+		if (typeof fn !== 'function') throw new TypeError('not a function');
+		this._state = 0;
+		this._handled = false;
+		this._value = undefined;
+		this._deferreds = [];
 
-    doResolve(fn, this);
-  }
+		doResolve(fn, this);
+	}
 
-  function handle(self, deferred) {
-    while (self._state === 3) {
-      self = self._value;
-    }
-    if (self._state === 0) {
-      self._deferreds.push(deferred);
-      return;
-    }
-    self._handled = true;
-    Promise._immediateFn(function () {
-      var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
-      if (cb === null) {
-        (self._state === 1 ? resolve : reject)(deferred.promise, self._value);
-        return;
-      }
-      var ret;
-      try {
-        ret = cb(self._value);
-      } catch (e) {
-        reject(deferred.promise, e);
-        return;
-      }
-      resolve(deferred.promise, ret);
-    });
-  }
+	function handle(self, deferred) {
+		while (self._state === 3) {
+			self = self._value;
+		}
+		if (self._state === 0) {
+			self._deferreds.push(deferred);
+			return;
+		}
+		self._handled = true;
+		Promise._immediateFn(function () {
+			var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
+			if (cb === null) {
+				(self._state === 1 ? resolve : reject)(deferred.promise, self._value);
+				return;
+			}
+			var ret;
+			try {
+				ret = cb(self._value);
+			} catch (e) {
+				reject(deferred.promise, e);
+				return;
+			}
+			resolve(deferred.promise, ret);
+		});
+	}
 
-  function resolve(self, newValue) {
-    try {
-      // Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-      if (newValue === self) throw new TypeError('A promise cannot be resolved with itself.');
-      if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
-        var then = newValue.then;
-        if (newValue instanceof Promise) {
-          self._state = 3;
-          self._value = newValue;
-          finale(self);
-          return;
-        } else if (typeof then === 'function') {
-          doResolve(bind(then, newValue), self);
-          return;
-        }
-      }
-      self._state = 1;
-      self._value = newValue;
-      finale(self);
-    } catch (e) {
-      reject(self, e);
-    }
-  }
+	function resolve(self, newValue) {
+		try {
+			// Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+			if (newValue === self) throw new TypeError('A promise cannot be resolved with itself.');
+			if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+				var then = newValue.then;
+				if (newValue instanceof Promise) {
+					self._state = 3;
+					self._value = newValue;
+					finale(self);
+					return;
+				} else if (typeof then === 'function') {
+					doResolve(bind(then, newValue), self);
+					return;
+				}
+			}
+			self._state = 1;
+			self._value = newValue;
+			finale(self);
+		} catch (e) {
+			reject(self, e);
+		}
+	}
 
-  function reject(self, newValue) {
-    self._state = 2;
-    self._value = newValue;
-    finale(self);
-  }
+	function reject(self, newValue) {
+		self._state = 2;
+		self._value = newValue;
+		finale(self);
+	}
 
-  function finale(self) {
-    if (self._state === 2 && self._deferreds.length === 0) {
-      Promise._immediateFn(function() {
-        if (!self._handled) {
-          Promise._unhandledRejectionFn(self._value);
-        }
-      });
-    }
+	function finale(self) {
+		if (self._state === 2 && self._deferreds.length === 0) {
+			Promise._immediateFn(function() {
+				if (!self._handled) {
+					Promise._unhandledRejectionFn(self._value);
+				}
+			});
+		}
 
-    for (var i = 0, len = self._deferreds.length; i < len; i++) {
-      handle(self, self._deferreds[i]);
-    }
-    self._deferreds = null;
-  }
+		for (var i = 0, len = self._deferreds.length; i < len; i++) {
+			handle(self, self._deferreds[i]);
+		}
+		self._deferreds = null;
+	}
 
-  function Handler(onFulfilled, onRejected, promise) {
-    this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
-    this.onRejected = typeof onRejected === 'function' ? onRejected : null;
-    this.promise = promise;
-  }
+	function Handler(onFulfilled, onRejected, promise) {
+		this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+		this.onRejected = typeof onRejected === 'function' ? onRejected : null;
+		this.promise = promise;
+	}
 
-  /**
-   * Take a potentially misbehaving resolver function and make sure
-   * onFulfilled and onRejected are only called once.
-   *
-   * Makes no guarantees about asynchrony.
-   */
-  function doResolve(fn, self) {
-    var done = false;
-    try {
-      fn(function (value) {
-        if (done) return;
-        done = true;
-        resolve(self, value);
-      }, function (reason) {
-        if (done) return;
-        done = true;
-        reject(self, reason);
-      });
-    } catch (ex) {
-      if (done) return;
-      done = true;
-      reject(self, ex);
-    }
-  }
+	/**
+	 * Take a potentially misbehaving resolver function and make sure
+	 * onFulfilled and onRejected are only called once.
+	 *
+	 * Makes no guarantees about asynchrony.
+	 */
+	function doResolve(fn, self) {
+		var done = false;
+		try {
+			fn(function (value) {
+				if (done) return;
+				done = true;
+				resolve(self, value);
+			}, function (reason) {
+				if (done) return;
+				done = true;
+				reject(self, reason);
+			});
+		} catch (ex) {
+			if (done) return;
+			done = true;
+			reject(self, ex);
+		}
+	}
 
-  Promise.prototype['catch'] = function (onRejected) {
-    return this.then(null, onRejected);
-  };
+	Promise.prototype['catch'] = function (onRejected) {
+		return this.then(null, onRejected);
+	};
 
-  Promise.prototype.then = function (onFulfilled, onRejected) {
-    var prom = new (this.constructor)(noop);
+	Promise.prototype.then = function (onFulfilled, onRejected) {
+		var prom = new (this.constructor)(noop);
 
-    handle(this, new Handler(onFulfilled, onRejected, prom));
-    return prom;
-  };
+		handle(this, new Handler(onFulfilled, onRejected, prom));
+		return prom;
+	};
 
-  Promise.all = function (arr) {
-    var args = Array.prototype.slice.call(arr);
+	Promise.all = function (arr) {
+		var args = Array.prototype.slice.call(arr);
 
-    return new Promise(function (resolve, reject) {
-      if (args.length === 0) return resolve([]);
-      var remaining = args.length;
+		return new Promise(function (resolve, reject) {
+			if (args.length === 0) return resolve([]);
+			var remaining = args.length;
 
-      function res(i, val) {
-        try {
-          if (val && (typeof val === 'object' || typeof val === 'function')) {
-            var then = val.then;
-            if (typeof then === 'function') {
-              then.call(val, function (val) {
-                res(i, val);
-              }, reject);
-              return;
-            }
-          }
-          args[i] = val;
-          if (--remaining === 0) {
-            resolve(args);
-          }
-        } catch (ex) {
-          reject(ex);
-        }
-      }
+			function res(i, val) {
+				try {
+					if (val && (typeof val === 'object' || typeof val === 'function')) {
+						var then = val.then;
+						if (typeof then === 'function') {
+							then.call(val, function (val) {
+								res(i, val);
+							}, reject);
+							return;
+						}
+					}
+					args[i] = val;
+					if (--remaining === 0) {
+						resolve(args);
+					}
+				} catch (ex) {
+					reject(ex);
+				}
+			}
 
-      for (var i = 0; i < args.length; i++) {
-        res(i, args[i]);
-      }
-    });
-  };
+			for (var i = 0; i < args.length; i++) {
+				res(i, args[i]);
+			}
+		});
+	};
 
-  Promise.resolve = function (value) {
-    if (value && typeof value === 'object' && value.constructor === Promise) {
-      return value;
-    }
+	Promise.resolve = function (value) {
+		if (value && typeof value === 'object' && value.constructor === Promise) {
+			return value;
+		}
 
-    return new Promise(function (resolve) {
-      resolve(value);
-    });
-  };
+		return new Promise(function (resolve) {
+			resolve(value);
+		});
+	};
 
-  Promise.reject = function (value) {
-    return new Promise(function (resolve, reject) {
-      reject(value);
-    });
-  };
+	Promise.reject = function (value) {
+		return new Promise(function (resolve, reject) {
+			reject(value);
+		});
+	};
 
-  Promise.race = function (values) {
-    return new Promise(function (resolve, reject) {
-      for (var i = 0, len = values.length; i < len; i++) {
-        values[i].then(resolve, reject);
-      }
-    });
-  };
+	Promise.race = function (values) {
+		return new Promise(function (resolve, reject) {
+			for (var i = 0, len = values.length; i < len; i++) {
+				values[i].then(resolve, reject);
+			}
+		});
+	};
 
-  // Use polyfill for setImmediate for performance gains
-  Promise._immediateFn = (typeof setImmediate === 'function' && function (fn) { setImmediate(fn); }) ||
-    function (fn) {
-      setTimeoutFunc(fn, 0);
-    };
+	// Use polyfill for setImmediate for performance gains
+	Promise._immediateFn = (typeof setImmediate === 'function' && function (fn) { setImmediate(fn); }) ||
+		function (fn) {
+			setTimeoutFunc(fn, 0);
+		};
 
-  Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
-    if (typeof console !== 'undefined' && console) {
-      console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
-    }
-  };
+	Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
+		if (typeof console !== 'undefined' && console) {
+			console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
+		}
+	};
 
-  /**
-   * Set the immediate function to execute callbacks
-   * @param fn {function} Function to execute
-   * @deprecated
-   */
-  Promise._setImmediateFn = function _setImmediateFn(fn) {
-    Promise._immediateFn = fn;
-  };
+	/**
+	 * Set the immediate function to execute callbacks
+	 * @param fn {function} Function to execute
+	 * @deprecated
+	 */
+	Promise._setImmediateFn = function _setImmediateFn(fn) {
+		Promise._immediateFn = fn;
+	};
 
-  /**
-   * Change the function to execute on unhandled rejection
-   * @param {function} fn Function to execute on unhandled rejection
-   * @deprecated
-   */
-  Promise._setUnhandledRejectionFn = function _setUnhandledRejectionFn(fn) {
-    Promise._unhandledRejectionFn = fn;
-  };
-  
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Promise;
-  } else if (!root.Promise) {
-    root.Promise = Promise;
-  }
+	/**
+	 * Change the function to execute on unhandled rejection
+	 * @param {function} fn Function to execute on unhandled rejection
+	 * @deprecated
+	 */
+	Promise._setUnhandledRejectionFn = function _setUnhandledRejectionFn(fn) {
+		Promise._unhandledRejectionFn = fn;
+	};
+	
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = Promise;
+	} else if (!root.Promise) {
+		root.Promise = Promise;
+	}
 
 })(this);
 
@@ -339,7 +339,7 @@ i18n.t = function (message) {
 	if (typeof message === 'string' && message.length) {
 
 		var str = void 0,
-		    pluralForm = void 0;
+				pluralForm = void 0;
 
 		var language = i18n.language();
 
@@ -607,7 +607,7 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 	t.mediaElement = _document2.default.createElement(options.fakeNodeName);
 
 	var id = idOrNode,
-	    error = false;
+			error = false;
 
 	if (typeof idOrNode === 'string') {
 		t.mediaElement.originalNode = _document2.default.getElementById(idOrNode);
@@ -640,7 +640,7 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 			xhr.onreadystatechange = function () {
 				if (this.readyState === 4 && this.status === 200) {
 					var _url = _window2.default.URL || _window2.default.webkitURL,
-					    blobUrl = _url.createObjectURL(this.response);
+							blobUrl = _url.createObjectURL(this.response);
 					t.mediaElement.originalNode.setAttribute('src', blobUrl);
 					return blobUrl;
 				}
@@ -672,11 +672,11 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 			case 'audio':
 			case 'video':
 				var _sources = t.mediaElement.originalNode.children.length,
-				    nodeSource = t.mediaElement.originalNode.getAttribute('src');
+						nodeSource = t.mediaElement.originalNode.getAttribute('src');
 
 				if (nodeSource) {
 					var node = t.mediaElement.originalNode,
-					    type = (0, _media2.formatType)(nodeSource, node.getAttribute('type'));
+							type = (0, _media2.formatType)(nodeSource, node.getAttribute('type'));
 					mediaFiles.push({
 						type: type,
 						src: processURL(nodeSource, type)
@@ -687,7 +687,7 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 					var n = t.mediaElement.originalNode.children[i];
 					if (n.tagName.toLowerCase() === 'source') {
 						var src = n.getAttribute('src'),
-						    _type = (0, _media2.formatType)(src, n.getAttribute('type'));
+								_type = (0, _media2.formatType)(src, n.getAttribute('type'));
 						mediaFiles.push({ type: _type, src: processURL(src, _type) });
 					}
 				}
@@ -705,7 +705,7 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 	t.mediaElement.changeRenderer = function (rendererName, mediaFiles) {
 
 		var t = _this,
-		    media = Object.keys(mediaFiles[0]).length > 2 ? mediaFiles[0] : mediaFiles[0].src;
+				media = Object.keys(mediaFiles[0]).length > 2 ? mediaFiles[0] : mediaFiles[0].src;
 
 		if (t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null && t.mediaElement.renderer.name === rendererName) {
 			t.mediaElement.renderer.pause();
@@ -726,7 +726,7 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 		}
 
 		var newRenderer = t.mediaElement.renderers[rendererName],
-		    newRendererType = null;
+				newRendererType = null;
 
 		if (newRenderer !== undefined && newRenderer !== null) {
 			newRenderer.show();
@@ -777,13 +777,13 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 	};
 
 	var props = _mejs2.default.html5media.properties,
-	    methods = _mejs2.default.html5media.methods,
-	    addProperty = function addProperty(obj, name, onGet, onSet) {
+			methods = _mejs2.default.html5media.methods,
+			addProperty = function addProperty(obj, name, onGet, onSet) {
 		var oldValue = obj[name];
 		var getFn = function getFn() {
 			return onGet.apply(obj, [oldValue]);
 		},
-		    setFn = function setFn(newValue) {
+				setFn = function setFn(newValue) {
 			oldValue = onSet.apply(obj, [newValue]);
 			return oldValue;
 		};
@@ -793,14 +793,14 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 			set: setFn
 		});
 	},
-	    assignGettersSetters = function assignGettersSetters(propName) {
+			assignGettersSetters = function assignGettersSetters(propName) {
 		if (propName !== 'src') {
 
 			var capName = '' + propName.substring(0, 1).toUpperCase() + propName.substring(1),
-			    getFn = function getFn() {
+					getFn = function getFn() {
 				return t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null && typeof t.mediaElement.renderer['get' + capName] === 'function' ? t.mediaElement.renderer['get' + capName]() : null;
 			},
-			    setFn = function setFn(value) {
+					setFn = function setFn(value) {
 				if (t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null && typeof t.mediaElement.renderer['set' + capName] === 'function') {
 					t.mediaElement.renderer['set' + capName](value);
 				}
@@ -811,10 +811,10 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 			t.mediaElement['set' + capName] = setFn;
 		}
 	},
-	    getSrc = function getSrc() {
+			getSrc = function getSrc() {
 		return t.mediaElement.renderer !== undefined && t.mediaElement.renderer !== null ? t.mediaElement.renderer.getSrc() : null;
 	},
-	    setSrc = function setSrc(value) {
+			setSrc = function setSrc(value) {
 		var mediaFiles = [];
 
 		if (typeof value === 'string') {
@@ -824,8 +824,8 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 			});
 		} else if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.src !== undefined) {
 			var _src = (0, _media2.absolutizeUrl)(value.src),
-			    _type2 = value.type,
-			    media = Object.assign(value, {
+					_type2 = value.type,
+					media = Object.assign(value, {
 				src: _src,
 				type: (_type2 === '' || _type2 === null || _type2 === undefined) && _src ? (0, _media2.getTypeFromFile)(_src) : _type2
 			});
@@ -834,8 +834,8 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 			for (var _i2 = 0, total = value.length; _i2 < total; _i2++) {
 
 				var _src2 = (0, _media2.absolutizeUrl)(value[_i2].src),
-				    _type3 = value[_i2].type,
-				    _media = Object.assign(value[_i2], {
+						_type3 = value[_i2].type,
+						_media = Object.assign(value[_i2], {
 					src: _src2,
 					type: (_type3 === '' || _type3 === null || _type3 === undefined) && _src2 ? (0, _media2.getTypeFromFile)(_src2) : _type3
 				});
@@ -845,7 +845,7 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 		}
 
 		var renderInfo = _renderer.renderer.select(mediaFiles, t.mediaElement.options.renderers.length ? t.mediaElement.options.renderers : []),
-		    event = void 0;
+				event = void 0;
 
 		if (!t.mediaElement.paused) {
 			t.mediaElement.pause();
@@ -861,7 +861,7 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 
 		return mediaFiles[0].src ? t.mediaElement.changeRenderer(renderInfo.rendererName, mediaFiles) : null;
 	},
-	    triggerAction = function triggerAction(methodName, args) {
+			triggerAction = function triggerAction(methodName, args) {
 		try {
 			if (methodName === 'play' && t.mediaElement.rendererName === 'native_dash') {
 				var response = t.mediaElement.renderer[methodName](args);
@@ -888,7 +888,7 @@ var MediaElement = function MediaElement(idOrNode, options, sources) {
 			t.mediaElement.generateError(e, mediaFiles);
 		}
 	},
-	    assignMethods = function assignMethods(methodName) {
+			assignMethods = function assignMethods(methodName) {
 		t.mediaElement[methodName] = function () {
 			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 				args[_key] = arguments[_key];
@@ -1074,7 +1074,7 @@ var Renderer = function () {
 
 			if (!renderersLength) {
 				var rendererIndicator = [/^(html5|native)/i, /^flash/i, /iframe$/i],
-				    rendererRanking = function rendererRanking(renderer) {
+						rendererRanking = function rendererRanking(renderer) {
 					for (var i = 0, total = rendererIndicator.length; i < total; i++) {
 						if (rendererIndicator[i].test(renderer)) {
 							return i;
@@ -1090,7 +1090,7 @@ var Renderer = function () {
 
 			for (var i = 0, total = renderers.length; i < total; i++) {
 				var key = renderers[i],
-				    _renderer = this.renderers[key];
+						_renderer = this.renderers[key];
 
 				if (_renderer !== null && _renderer !== undefined) {
 					for (var j = 0, jl = mediaFiles.length; j < jl; j++) {
@@ -1203,8 +1203,8 @@ Object.assign(_player2.default.prototype, {
 		player.detectFullscreenMode();
 
 		var t = this,
-		    fullscreenTitle = (0, _general.isString)(t.options.fullscreenText) ? t.options.fullscreenText : _i18n2.default.t('mejs.fullscreen'),
-		    fullscreenBtn = _document2.default.createElement('div');
+				fullscreenTitle = (0, _general.isString)(t.options.fullscreenText) ? t.options.fullscreenText : _i18n2.default.t('mejs.fullscreen'),
+				fullscreenBtn = _document2.default.createElement('div');
 
 		fullscreenBtn.className = t.options.classPrefix + 'button ' + t.options.classPrefix + 'fullscreen-button';
 		fullscreenBtn.innerHTML = '<button type="button" aria-controls="' + t.id + '" title="' + fullscreenTitle + '" aria-label="' + fullscreenTitle + '" tabindex="0"></button>';
@@ -1273,7 +1273,7 @@ Object.assign(_player2.default.prototype, {
 	},
 	detectFullscreenMode: function detectFullscreenMode() {
 		var t = this,
-		    isNative = t.media.rendererName !== null && /(native|html5)/i.test(t.media.rendererName);
+				isNative = t.media.rendererName !== null && /(native|html5)/i.test(t.media.rendererName);
 
 		var mode = '';
 
@@ -1290,8 +1290,8 @@ Object.assign(_player2.default.prototype, {
 	},
 	enterFullScreen: function enterFullScreen() {
 		var t = this,
-		    isNative = t.media.rendererName !== null && /(html5|native)/i.test(t.media.rendererName),
-		    containerStyles = getComputedStyle(t.getElement(t.container));
+				isNative = t.media.rendererName !== null && /(html5|native)/i.test(t.media.rendererName),
+				containerStyles = getComputedStyle(t.getElement(t.container));
 
 		if (t.options.useFakeFullscreen === false && Features.IS_IOS && Features.HAS_IOS_FULLSCREEN && typeof t.media.originalNode.webkitEnterFullscreen === 'function' && t.media.originalNode.canPlayType((0, _media.getTypeFromFile)(t.media.getSrc()))) {
 			t.media.originalNode.webkitEnterFullscreen();
@@ -1312,10 +1312,10 @@ Object.assign(_player2.default.prototype, {
 
 					if (t.isNativeFullScreen) {
 						var percentErrorMargin = 0.002,
-						    windowWidth = _window2.default.innerWidth || _document2.default.documentElement.clientWidth || _document2.default.body.clientWidth,
-						    screenWidth = screen.width,
-						    absDiff = Math.abs(screenWidth - windowWidth),
-						    marginError = screenWidth * percentErrorMargin;
+								windowWidth = _window2.default.innerWidth || _document2.default.documentElement.clientWidth || _document2.default.body.clientWidth,
+								screenWidth = screen.width,
+								absDiff = Math.abs(screenWidth - windowWidth),
+								marginError = screenWidth * percentErrorMargin;
 
 						if (absDiff > marginError) {
 							t.exitFullScreen();
@@ -1341,7 +1341,7 @@ Object.assign(_player2.default.prototype, {
 			t.node.style.height = '100%';
 		} else {
 			var elements = t.getElement(t.container).querySelectorAll('embed, object, video'),
-			    _total = elements.length;
+					_total = elements.length;
 			for (var i = 0; i < _total; i++) {
 				elements[i].style.width = '100%';
 				elements[i].style.height = '100%';
@@ -1353,7 +1353,7 @@ Object.assign(_player2.default.prototype, {
 		}
 
 		var layers = t.getElement(t.layers).children,
-		    total = layers.length;
+				total = layers.length;
 		for (var _i = 0; _i < total; _i++) {
 			layers[_i].style.width = '100%';
 			layers[_i].style.height = '100%';
@@ -1368,7 +1368,7 @@ Object.assign(_player2.default.prototype, {
 		t.isFullScreen = true;
 
 		var zoomFactor = Math.min(screen.width / t.width, screen.height / t.height),
-		    captionText = t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'captions-text');
+				captionText = t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'captions-text');
 		if (captionText) {
 			captionText.style.fontSize = zoomFactor * 100 + '%';
 			captionText.style.lineHeight = 'normal';
@@ -1379,7 +1379,7 @@ Object.assign(_player2.default.prototype, {
 	},
 	exitFullScreen: function exitFullScreen() {
 		var t = this,
-		    isNative = t.media.rendererName !== null && /(native|html5)/i.test(t.media.rendererName);
+				isNative = t.media.rendererName !== null && /(native|html5)/i.test(t.media.rendererName);
 
 		clearTimeout(t.containerSizeTimeout);
 
@@ -1399,7 +1399,7 @@ Object.assign(_player2.default.prototype, {
 				t.node.style.height = t.normalHeight + 'px';
 			} else {
 				var elements = t.getElement(t.container).querySelectorAll('embed, object, video'),
-				    _total2 = elements.length;
+						_total2 = elements.length;
 				for (var i = 0; i < _total2; i++) {
 					elements[i].style.width = t.normalWidth + 'px';
 					elements[i].style.height = t.normalHeight + 'px';
@@ -1411,7 +1411,7 @@ Object.assign(_player2.default.prototype, {
 			}
 
 			var layers = t.getElement(t.layers).children,
-			    total = layers.length;
+					total = layers.length;
 			for (var _i2 = 0; _i2 < total; _i2++) {
 				layers[_i2].style.width = t.normalWidth + 'px';
 				layers[_i2].style.height = t.normalHeight + 'px';
@@ -1467,10 +1467,10 @@ Object.assign(_player.config, {
 Object.assign(_player2.default.prototype, {
 	buildplaypause: function buildplaypause(player, controls, layers, media) {
 		var t = this,
-		    op = t.options,
-		    playTitle = (0, _general.isString)(op.playText) ? op.playText : _i18n2.default.t('mejs.play'),
-		    pauseTitle = (0, _general.isString)(op.pauseText) ? op.pauseText : _i18n2.default.t('mejs.pause'),
-		    play = _document2.default.createElement('div');
+				op = t.options,
+				playTitle = (0, _general.isString)(op.playText) ? op.playText : _i18n2.default.t('mejs.play'),
+				pauseTitle = (0, _general.isString)(op.pauseText) ? op.pauseText : _i18n2.default.t('mejs.pause'),
+				play = _document2.default.createElement('div');
 
 		play.className = t.options.classPrefix + 'button ' + t.options.classPrefix + 'playpause-button ' + t.options.classPrefix + 'play';
 		play.innerHTML = '<button type="button" aria-controls="' + t.id + '" title="' + playTitle + '" aria-label="' + pauseTitle + '" tabindex="0"></button>';
@@ -1565,13 +1565,13 @@ Object.assign(_player2.default.prototype, {
 	buildprogress: function buildprogress(player, controls, layers, media) {
 
 		var lastKeyPressTime = 0,
-		    mouseIsDown = false,
-		    startedPaused = false;
+				mouseIsDown = false,
+				startedPaused = false;
 
 		var t = this,
-		    autoRewindInitial = player.options.autoRewind,
-		    tooltip = player.options.enableProgressTooltip ? '<span class="' + t.options.classPrefix + 'time-float">' + ('<span class="' + t.options.classPrefix + 'time-float-current">00:00</span>') + ('<span class="' + t.options.classPrefix + 'time-float-corner"></span>') + '</span>' : '',
-		    rail = _document2.default.createElement('div');
+				autoRewindInitial = player.options.autoRewind,
+				tooltip = player.options.enableProgressTooltip ? '<span class="' + t.options.classPrefix + 'time-float">' + ('<span class="' + t.options.classPrefix + 'time-float-current">00:00</span>') + ('<span class="' + t.options.classPrefix + 'time-float-corner"></span>') + '</span>' : '',
+				rail = _document2.default.createElement('div');
 
 		rail.className = t.options.classPrefix + 'time-rail';
 		rail.innerHTML = '<span class="' + t.options.classPrefix + 'time-total ' + t.options.classPrefix + 'time-slider">' + ('<span class="' + t.options.classPrefix + 'time-buffering"></span>') + ('<span class="' + t.options.classPrefix + 'time-loaded"></span>') + ('<span class="' + t.options.classPrefix + 'time-current"></span>') + ('<span class="' + t.options.classPrefix + 'time-hovered no-hover"></span>') + ('<span class="' + t.options.classPrefix + 'time-handle"><span class="' + t.options.classPrefix + 'time-handle-content"></span></span>') + ('' + tooltip) + '</span>';
@@ -1635,9 +1635,9 @@ Object.assign(_player2.default.prototype, {
 
 		var handleMouseMove = function handleMouseMove(e) {
 			var totalStyles = getComputedStyle(t.total),
-			    offsetStyles = (0, _dom.offset)(t.total),
-			    width = t.total.offsetWidth,
-			    transform = function () {
+					offsetStyles = (0, _dom.offset)(t.total),
+					width = t.total.offsetWidth,
+					transform = function () {
 				if (totalStyles.webkitTransform !== undefined) {
 					return 'webkitTransform';
 				} else if (totalStyles.mozTransform !== undefined) {
@@ -1650,7 +1650,7 @@ Object.assign(_player2.default.prototype, {
 					return 'transform';
 				}
 			}(),
-			    cssMatrix = function () {
+					cssMatrix = function () {
 				if ('WebKitCSSMatrix' in window) {
 					return 'WebKitCSSMatrix';
 				} else if ('MSCSSMatrix' in window) {
@@ -1661,9 +1661,9 @@ Object.assign(_player2.default.prototype, {
 			}();
 
 			var percentage = 0,
-			    leftPos = 0,
-			    pos = 0,
-			    x = void 0;
+					leftPos = 0,
+					pos = 0,
+					x = void 0;
 
 			if (e.originalEvent && e.originalEvent.changedTouches) {
 				x = e.originalEvent.changedTouches[0].pageX;
@@ -1695,8 +1695,8 @@ Object.assign(_player2.default.prototype, {
 					}
 					if (t.options.useSmoothHover && cssMatrix !== null && typeof window[cssMatrix] !== 'undefined') {
 						var matrix = new window[cssMatrix](getComputedStyle(t.handle)[transform]),
-						    handleLocation = matrix.m41,
-						    hoverScaleX = pos / parseFloat(getComputedStyle(t.total).width) - handleLocation / parseFloat(getComputedStyle(t.total).width);
+								handleLocation = matrix.m41,
+								hoverScaleX = pos / parseFloat(getComputedStyle(t.total).width) - handleLocation / parseFloat(getComputedStyle(t.total).width);
 
 						t.hovered.style.left = handleLocation + 'px';
 						t.setTransformStyle(t.hovered, 'scaleX(' + hoverScaleX + ')');
@@ -1711,8 +1711,8 @@ Object.assign(_player2.default.prototype, {
 
 					if (t.timefloat) {
 						var half = t.timefloat.offsetWidth / 2,
-						    offsetContainer = mejs.Utils.offset(t.getElement(t.container)),
-						    tooltipStyles = getComputedStyle(t.timefloat);
+								offsetContainer = mejs.Utils.offset(t.getElement(t.container)),
+								tooltipStyles = getComputedStyle(t.timefloat);
 
 						if (x - offsetContainer.left < t.timefloat.offsetWidth) {
 							leftPos = half;
@@ -1738,11 +1738,11 @@ Object.assign(_player2.default.prototype, {
 				t.timefloat.style.display = 'block';
 			}
 		},
-		    updateSlider = function updateSlider() {
+				updateSlider = function updateSlider() {
 			var seconds = t.getCurrentTime(),
-			    timeSliderText = _i18n2.default.t('mejs.time-slider'),
-			    time = (0, _time.secondsToTimeCode)(seconds, player.options.alwaysShowHours, player.options.showTimecodeFrameCount, player.options.framesPerSecond, player.options.secondsDecimalLength, player.options.timeFormat),
-			    duration = t.getDuration();
+					timeSliderText = _i18n2.default.t('mejs.time-slider'),
+					time = (0, _time.secondsToTimeCode)(seconds, player.options.alwaysShowHours, player.options.showTimecodeFrameCount, player.options.framesPerSecond, player.options.secondsDecimalLength, player.options.timeFormat),
+					duration = t.getDuration();
 
 			t.slider.setAttribute('role', 'slider');
 			t.slider.tabIndex = 0;
@@ -1761,12 +1761,12 @@ Object.assign(_player2.default.prototype, {
 				t.slider.removeAttribute('aria-valuetext');
 			}
 		},
-		    restartPlayer = function restartPlayer() {
+				restartPlayer = function restartPlayer() {
 			if (new Date() - lastKeyPressTime >= 1000) {
 				t.play();
 			}
 		},
-		    handleMouseup = function handleMouseup() {
+				handleMouseup = function handleMouseup() {
 			if (mouseIsDown && t.getCurrentTime() !== null && t.newTime.toFixed(4) !== t.getCurrentTime().toFixed(4)) {
 				t.setCurrentTime(t.newTime);
 				t.setCurrentRail();
@@ -1793,9 +1793,9 @@ Object.assign(_player2.default.prototype, {
 			if (t.options.keyActions.length) {
 
 				var keyCode = e.which || e.keyCode || 0,
-				    duration = t.getDuration(),
-				    seekForward = player.options.defaultSeekForwardInterval(media),
-				    seekBackward = player.options.defaultSeekBackwardInterval(media);
+						duration = t.getDuration(),
+						seekForward = player.options.defaultSeekForwardInterval(media),
+						seekBackward = player.options.defaultSeekBackwardInterval(media);
 
 				var seekTime = t.getCurrentTime();
 				var volume = t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'volume-slider');
@@ -1810,7 +1810,7 @@ Object.assign(_player2.default.prototype, {
 					}
 
 					var newVolume = keyCode === 38 ? Math.min(t.volume + 0.1, 1) : Math.max(t.volume - 0.1, 0),
-					    mutePlayer = newVolume <= 0;
+							mutePlayer = newVolume <= 0;
 					t.setVolume(newVolume);
 					t.setMuted(mutePlayer);
 					return;
@@ -2007,7 +2007,7 @@ Object.assign(_player2.default.prototype, {
 	},
 	setProgressRail: function setProgressRail(e) {
 		var t = this,
-		    target = e !== undefined ? e.detail.target || e.target : t.media;
+				target = e !== undefined ? e.detail.target || e.target : t.media;
 
 		var percent = null;
 
@@ -2043,7 +2043,7 @@ Object.assign(_player2.default.prototype, {
 				var tW = parseFloat(getComputedStyle(t.total).width);
 
 				var newWidth = Math.round(tW * nTime / t.getDuration()),
-				    handlePos = newWidth - Math.round(t.handle.offsetWidth / 2);
+						handlePos = newWidth - Math.round(t.handle.offsetWidth / 2);
 
 				handlePos = handlePos < 0 ? 0 : handlePos;
 				t.setTransformStyle(t.current, 'scaleX(' + newWidth / tW + ')');
@@ -2095,7 +2095,7 @@ Object.assign(_player.config, {
 Object.assign(_player2.default.prototype, {
 	buildcurrent: function buildcurrent(player, controls, layers, media) {
 		var t = this,
-		    time = _document2.default.createElement('div');
+				time = _document2.default.createElement('div');
 
 		time.className = t.options.classPrefix + 'time';
 		time.setAttribute('role', 'timer');
@@ -2116,7 +2116,7 @@ Object.assign(_player2.default.prototype, {
 	},
 	buildduration: function buildduration(player, controls, layers, media) {
 		var t = this,
-		    currTime = controls.lastChild.querySelector('.' + t.options.classPrefix + 'currenttime');
+				currTime = controls.lastChild.querySelector('.' + t.options.classPrefix + 'currenttime');
 
 		if (currTime) {
 			controls.querySelector('.' + t.options.classPrefix + 'time').innerHTML += t.options.timeAndDurationSeparator + '<span class="' + t.options.classPrefix + 'duration">' + ((0, _time.secondsToTimeCode)(t.options.duration, t.options.alwaysShowHours, t.options.showTimecodeFrameCount, t.options.framesPerSecond, t.options.secondsDecimalLength, t.options.timeFormat) + '</span>');
@@ -2246,10 +2246,10 @@ Object.assign(_player2.default.prototype, {
 		}
 
 		var t = this,
-		    attr = t.options.tracksAriaLive ? ' role="log" aria-live="assertive" aria-atomic="false"' : '',
-		    tracksTitle = (0, _general.isString)(t.options.tracksText) ? t.options.tracksText : _i18n2.default.t('mejs.captions-subtitles'),
-		    chaptersTitle = (0, _general.isString)(t.options.chaptersText) ? t.options.chaptersText : _i18n2.default.t('mejs.captions-chapters'),
-		    total = player.trackFiles === null ? player.tracks.length : player.trackFiles.length;
+				attr = t.options.tracksAriaLive ? ' role="log" aria-live="assertive" aria-atomic="false"' : '',
+				tracksTitle = (0, _general.isString)(t.options.tracksText) ? t.options.tracksText : _i18n2.default.t('mejs.captions-subtitles'),
+				chaptersTitle = (0, _general.isString)(t.options.chaptersText) ? t.options.chaptersText : _i18n2.default.t('mejs.captions-chapters'),
+				total = player.trackFiles === null ? player.tracks.length : player.trackFiles.length;
 
 		if (t.domNode.textTracks) {
 			for (var i = t.domNode.textTracks.length - 1; i >= 0; i--) {
@@ -2283,7 +2283,7 @@ Object.assign(_player2.default.prototype, {
 
 		for (var _i = 0; _i < total; _i++) {
 			var kind = player.tracks[_i].kind,
-			    src = player.tracks[_i].src;
+					src = player.tracks[_i].src;
 			if (src.trim()) {
 				if (kind === 'subtitles' || kind === 'captions') {
 					subtitleCount++;
@@ -2307,7 +2307,7 @@ Object.assign(_player2.default.prototype, {
 		player.loadNextTrack();
 
 		var inEvents = ['mouseenter', 'focusin'],
-		    outEvents = ['mouseleave', 'focusout'];
+				outEvents = ['mouseleave', 'focusout'];
 
 		if (t.options.toggleCaptionsButtonWhenOnlyOne && subtitleCount === 1) {
 			player.captionsButton.addEventListener('click', function (e) {
@@ -2320,7 +2320,7 @@ Object.assign(_player2.default.prototype, {
 			});
 		} else {
 			var labels = player.captionsButton.querySelectorAll('.' + t.options.classPrefix + 'captions-selector-label'),
-			    captions = player.captionsButton.querySelectorAll('input[type=radio]');
+					captions = player.captionsButton.querySelectorAll('input[type=radio]');
 
 			for (var _i3 = 0, _total = inEvents.length; _i3 < _total; _i3++) {
 				player.captionsButton.addEventListener(inEvents[_i3], function () {
@@ -2346,7 +2346,7 @@ Object.assign(_player2.default.prototype, {
 					var radio = (0, _dom.siblings)(this, function (el) {
 						return el.tagName === 'INPUT';
 					})[0],
-					    event = (0, _general.createEvent)('click', radio);
+							event = (0, _general.createEvent)('click', radio);
 					radio.dispatchEvent(event);
 					e.preventDefault();
 				});
@@ -2427,14 +2427,14 @@ Object.assign(_player2.default.prototype, {
 	},
 	findTracks: function findTracks() {
 		var t = this,
-		    tracktags = t.trackFiles === null ? t.node.querySelectorAll('track') : t.trackFiles,
-		    total = tracktags.length;
+				tracktags = t.trackFiles === null ? t.node.querySelectorAll('track') : t.trackFiles,
+				total = tracktags.length;
 
 		t.tracks = [];
 		for (var i = 0; i < total; i++) {
 			var track = tracktags[i],
-			    srclang = track.getAttribute('srclang').toLowerCase() || '',
-			    trackId = t.id + '_track_' + i + '_' + track.getAttribute('kind') + '_' + srclang;
+					srclang = track.getAttribute('srclang').toLowerCase() || '',
+					trackId = t.id + '_track_' + i + '_' + track.getAttribute('kind') + '_' + srclang;
 			t.tracks.push({
 				trackId: trackId,
 				srclang: srclang,
@@ -2449,9 +2449,9 @@ Object.assign(_player2.default.prototype, {
 	setTrack: function setTrack(trackId, setByKeyboard) {
 
 		var t = this,
-		    radios = t.captionsButton.querySelectorAll('input[type="radio"]'),
-		    captions = t.captionsButton.querySelectorAll('.' + t.options.classPrefix + 'captions-selected'),
-		    track = t.captionsButton.querySelector('input[value="' + trackId + '"]');
+				radios = t.captionsButton.querySelectorAll('input[type="radio"]'),
+				captions = t.captionsButton.querySelectorAll('.' + t.options.classPrefix + 'captions-selected'),
+				track = t.captionsButton.querySelector('input[value="' + trackId + '"]');
 
 		for (var i = 0, total = radios.length; i < total; i++) {
 			radios[i].checked = false;
@@ -2511,7 +2511,7 @@ Object.assign(_player2.default.prototype, {
 	},
 	loadTrack: function loadTrack(index) {
 		var t = this,
-		    track = t.tracks[index];
+				track = t.tracks[index];
 
 		if (track !== undefined && (track.src !== undefined || track.src !== "")) {
 			(0, _dom.ajax)(track.src, 'text', function (d) {
@@ -2535,8 +2535,8 @@ Object.assign(_player2.default.prototype, {
 	},
 	enableTrackButton: function enableTrackButton(track) {
 		var t = this,
-		    lang = track.srclang,
-		    target = _document2.default.getElementById('' + track.trackId);
+				lang = track.srclang,
+				target = _document2.default.getElementById('' + track.trackId);
 
 		if (!target) {
 			return;
@@ -2602,8 +2602,8 @@ Object.assign(_player2.default.prototype, {
 		}
 
 		var t = this,
-		    track = t.selectedTrack,
-		    sanitize = function sanitize(html) {
+				track = t.selectedTrack,
+				sanitize = function sanitize(html) {
 			var div = _document2.default.createElement('div');
 			div.innerHTML = html;
 
@@ -2616,7 +2616,7 @@ Object.assign(_player2.default.prototype, {
 			var allElements = div.getElementsByTagName('*');
 			for (var _i12 = 0, n = allElements.length; _i12 < n; _i12++) {
 				var attributesObj = allElements[_i12].attributes,
-				    attributes = Array.prototype.slice.call(attributesObj);
+						attributes = Array.prototype.slice.call(attributesObj);
 
 				for (var j = 0, total = attributes.length; j < total; j++) {
 					if (attributes[j].name.startsWith('on') || attributes[j].value.startsWith('javascript')) {
@@ -2667,7 +2667,7 @@ Object.assign(_player2.default.prototype, {
 			image.src = url;
 			image.addEventListener('load', function () {
 				var self = _this,
-				    visible = (0, _dom.siblings)(self, function (el) {
+						visible = (0, _dom.siblings)(self, function (el) {
 					return visible(el);
 				});
 				self.style.display = 'none';
@@ -2696,7 +2696,7 @@ Object.assign(_player2.default.prototype, {
 		}
 
 		var slides = t.slides,
-		    i = t.searchTrackPosition(slides.entries, t.media.currentTime);
+				i = t.searchTrackPosition(slides.entries, t.media.currentTime);
 
 		if (i > -1) {
 			t.showSlide(i);
@@ -2704,7 +2704,7 @@ Object.assign(_player2.default.prototype, {
 	},
 	drawChapters: function drawChapters(chapters) {
 		var t = this,
-		    total = chapters.entries.length;
+				total = chapters.entries.length;
 
 		if (!total) {
 			return;
@@ -2717,15 +2717,15 @@ Object.assign(_player2.default.prototype, {
 		}
 
 		var radios = t.chaptersButton.querySelectorAll('input[type="radio"]'),
-		    labels = t.chaptersButton.querySelectorAll('.' + t.options.classPrefix + 'chapters-selector-label');
+				labels = t.chaptersButton.querySelectorAll('.' + t.options.classPrefix + 'chapters-selector-label');
 
 		for (var _i13 = 0, _total10 = radios.length; _i13 < _total10; _i13++) {
 			radios[_i13].disabled = false;
 			radios[_i13].checked = false;
 			radios[_i13].addEventListener('click', function (e) {
 				var self = this,
-				    listItems = t.chaptersButton.querySelectorAll('li'),
-				    label = (0, _dom.siblings)(self, function (el) {
+						listItems = t.chaptersButton.querySelectorAll('li'),
+						label = (0, _dom.siblings)(self, function (el) {
 					return (0, _dom.hasClass)(el, t.options.classPrefix + 'chapters-selector-label');
 				})[0];
 
@@ -2757,7 +2757,7 @@ Object.assign(_player2.default.prototype, {
 				var radio = (0, _dom.siblings)(this, function (el) {
 					return el.tagName === 'INPUT';
 				})[0],
-				    event = (0, _general.createEvent)('click', radio);
+						event = (0, _general.createEvent)('click', radio);
 				radio.dispatchEvent(event);
 				e.preventDefault();
 			});
@@ -2765,10 +2765,10 @@ Object.assign(_player2.default.prototype, {
 	},
 	searchTrackPosition: function searchTrackPosition(tracks, currentTime) {
 		var lo = 0,
-		    hi = tracks.length - 1,
-		    mid = void 0,
-		    start = void 0,
-		    stop = void 0;
+				hi = tracks.length - 1,
+				mid = void 0,
+				start = void 0,
+				stop = void 0;
 
 		while (lo <= hi) {
 			mid = lo + hi >> 1;
@@ -2854,11 +2854,11 @@ _mejs2.default.TrackFormatParser = {
 
 		parse: function parse(trackText) {
 			var lines = trackText.split(/\r?\n/),
-			    entries = [];
+					entries = [];
 
 			var timecode = void 0,
-			    text = void 0,
-			    identifier = void 0;
+					text = void 0,
+					identifier = void 0;
 
 			for (var i = 0, total = lines.length; i < total; i++) {
 				timecode = this.pattern.exec(lines[i]);
@@ -2894,9 +2894,9 @@ _mejs2.default.TrackFormatParser = {
 		parse: function parse(trackText) {
 			trackText = $(trackText).filter('tt');
 			var container = trackText.firstChild,
-			    lines = container.querySelectorAll('p'),
-			    styleNode = trackText.getElementById('' + container.attr('style')),
-			    entries = [];
+					lines = container.querySelectorAll('p'),
+					styleNode = trackText.getElementById('' + container.attr('style')),
+					entries = [];
 
 			var styles = void 0;
 
@@ -2913,7 +2913,7 @@ _mejs2.default.TrackFormatParser = {
 
 			for (var _i16 = 0, _total13 = lines.length; _i16 < _total13; _i16++) {
 				var style = void 0,
-				    _temp = {
+						_temp = {
 					start: null,
 					stop: null,
 					style: null,
@@ -2999,11 +2999,11 @@ Object.assign(_player2.default.prototype, {
 		}
 
 		var t = this,
-		    mode = t.isVideo ? t.options.videoVolume : t.options.audioVolume,
-		    muteText = (0, _general.isString)(t.options.muteText) ? t.options.muteText : _i18n2.default.t('mejs.mute'),
-		    unmuteText = (0, _general.isString)(t.options.unmuteText) ? t.options.unmuteText : _i18n2.default.t('mejs.unmute'),
-		    volumeControlText = (0, _general.isString)(t.options.allyVolumeControlText) ? t.options.allyVolumeControlText : _i18n2.default.t('mejs.volume-help-text'),
-		    mute = _document2.default.createElement('div');
+				mode = t.isVideo ? t.options.videoVolume : t.options.audioVolume,
+				muteText = (0, _general.isString)(t.options.muteText) ? t.options.muteText : _i18n2.default.t('mejs.mute'),
+				unmuteText = (0, _general.isString)(t.options.unmuteText) ? t.options.unmuteText : _i18n2.default.t('mejs.unmute'),
+				volumeControlText = (0, _general.isString)(t.options.allyVolumeControlText) ? t.options.allyVolumeControlText : _i18n2.default.t('mejs.volume-help-text'),
+				mute = _document2.default.createElement('div');
 
 		mute.className = t.options.classPrefix + 'button ' + t.options.classPrefix + 'volume-button ' + t.options.classPrefix + 'mute';
 		mute.innerHTML = mode === 'horizontal' ? '<button type="button" aria-controls="' + t.id + '" title="' + muteText + '" aria-label="' + muteText + '" tabindex="0"></button>' : '<button type="button" aria-controls="' + t.id + '" title="' + muteText + '" aria-label="' + muteText + '" tabindex="0"></button>' + ('<a href="javascript:void(0);" class="' + t.options.classPrefix + 'volume-slider" ') + ('aria-label="' + _i18n2.default.t('mejs.volume-slider') + '" aria-valuemin="0" aria-valuemax="100" role="slider" ') + 'aria-orientation="vertical">' + ('<span class="' + t.options.classPrefix + 'offscreen">' + volumeControlText + '</span>') + ('<div class="' + t.options.classPrefix + 'volume-total">') + ('<div class="' + t.options.classPrefix + 'volume-current"></div>') + ('<div class="' + t.options.classPrefix + 'volume-handle"></div>') + '</div>' + '</a>';
@@ -3077,19 +3077,19 @@ Object.assign(_player2.default.prototype, {
 		}
 
 		var mouseIsDown = false,
-		    mouseIsOver = false,
-		    modified = false,
-		    updateVolumeSlider = function updateVolumeSlider() {
+				mouseIsOver = false,
+				modified = false,
+				updateVolumeSlider = function updateVolumeSlider() {
 			var volume = Math.floor(media.volume * 100);
 			volumeSlider.setAttribute('aria-valuenow', volume);
 			volumeSlider.setAttribute('aria-valuetext', volume + '%');
 		};
 
 		var volumeSlider = mode === 'vertical' ? t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'volume-slider') : t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'horizontal-volume-slider'),
-		    volumeTotal = mode === 'vertical' ? t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'volume-total') : t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'horizontal-volume-total'),
-		    volumeCurrent = mode === 'vertical' ? t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'volume-current') : t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'horizontal-volume-current'),
-		    volumeHandle = mode === 'vertical' ? t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'volume-handle') : t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'horizontal-volume-handle'),
-		    positionVolumeHandle = function positionVolumeHandle(volume) {
+				volumeTotal = mode === 'vertical' ? t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'volume-total') : t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'horizontal-volume-total'),
+				volumeCurrent = mode === 'vertical' ? t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'volume-current') : t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'horizontal-volume-current'),
+				volumeHandle = mode === 'vertical' ? t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'volume-handle') : t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'horizontal-volume-handle'),
+				positionVolumeHandle = function positionVolumeHandle(volume) {
 
 			if (volume === null || isNaN(volume) || volume === undefined) {
 				return;
@@ -3113,7 +3113,7 @@ Object.assign(_player2.default.prototype, {
 			}
 
 			var volumePercentage = volume * 100 + '%',
-			    volumeStyles = getComputedStyle(volumeHandle);
+					volumeStyles = getComputedStyle(volumeHandle);
 
 			if (mode === 'vertical') {
 				volumeCurrent.style.bottom = 0;
@@ -3127,9 +3127,9 @@ Object.assign(_player2.default.prototype, {
 				volumeHandle.style.marginLeft = -parseFloat(volumeStyles.width) / 2 + 'px';
 			}
 		},
-		    handleVolumeMove = function handleVolumeMove(e) {
+				handleVolumeMove = function handleVolumeMove(e) {
 			var totalOffset = (0, _dom.offset)(volumeTotal),
-			    volumeStyles = getComputedStyle(volumeTotal);
+					volumeStyles = getComputedStyle(volumeTotal);
 
 			modified = true;
 
@@ -3137,7 +3137,7 @@ Object.assign(_player2.default.prototype, {
 
 			if (mode === 'vertical') {
 				var railHeight = parseFloat(volumeStyles.height),
-				    newY = e.pageY - totalOffset.top;
+						newY = e.pageY - totalOffset.top;
 
 				volume = (railHeight - newY) / railHeight;
 
@@ -3146,7 +3146,7 @@ Object.assign(_player2.default.prototype, {
 				}
 			} else {
 				var railWidth = parseFloat(volumeStyles.width),
-				    newX = e.pageX - totalOffset.left;
+						newX = e.pageX - totalOffset.left;
 
 				volume = newX / railWidth;
 			}
@@ -3162,7 +3162,7 @@ Object.assign(_player2.default.prototype, {
 			e.preventDefault();
 			e.stopPropagation();
 		},
-		    toggleMute = function toggleMute() {
+				toggleMute = function toggleMute() {
 			if (t.muted) {
 				positionVolumeHandle(0);
 				(0, _dom.removeClass)(mute, t.options.classPrefix + 'mute');
@@ -3211,7 +3211,7 @@ Object.assign(_player2.default.prototype, {
 		mute.addEventListener('keydown', function (e) {
 			if (t.options.keyActions.length) {
 				var keyCode = e.which || e.keyCode || 0,
-				    volume = media.volume;
+						volume = media.volume;
 
 				switch (keyCode) {
 					case 38:
@@ -3577,7 +3577,7 @@ var MediaElementPlayer = function () {
 		_classCallCheck(this, MediaElementPlayer);
 
 		var t = this,
-		    element = typeof node === 'string' ? _document2.default.getElementById(node) : node;
+				element = typeof node === 'string' ? _document2.default.getElementById(node) : node;
 
 		if (!(t instanceof MediaElementPlayer)) {
 			return new MediaElementPlayer(element, o);
@@ -3649,7 +3649,7 @@ var MediaElementPlayer = function () {
 		key: 'init',
 		value: function init() {
 			var t = this,
-			    playerOptions = Object.assign({}, t.options, {
+					playerOptions = Object.assign({}, t.options, {
 				success: function success(media, domNode) {
 					t._meReady(media, domNode);
 				},
@@ -3657,7 +3657,7 @@ var MediaElementPlayer = function () {
 					t._handleError(e);
 				}
 			}),
-			    tagName = t.node.tagName.toLowerCase();
+					tagName = t.node.tagName.toLowerCase();
 
 			t.isDynamic = tagName !== 'audio' && tagName !== 'video' && tagName !== 'iframe';
 			t.isVideo = t.isDynamic ? t.options.isVideo : tagName !== 'audio' && t.options.isVideo;
@@ -3691,7 +3691,7 @@ var MediaElementPlayer = function () {
 						t.showControls(true);
 
 						var btnSelector = (0, _general.isNodeAfter)(e.relatedTarget, t.getElement(t.container)) ? '.' + t.options.classPrefix + 'controls .' + t.options.classPrefix + 'button:last-child > button' : '.' + t.options.classPrefix + 'playpause-button > button',
-						    button = t.getElement(t.container).querySelector(btnSelector);
+								button = t.getElement(t.container).querySelector(btnSelector);
 
 						button.focus();
 					}
@@ -3731,9 +3731,9 @@ var MediaElementPlayer = function () {
 					dom.addClass(t.getElement(t.container), t.options.classPrefix + 'hide-cues');
 
 					var cloneNode = t.node.cloneNode(),
-					    children = t.node.children,
-					    mediaFiles = [],
-					    tracks = [];
+							children = t.node.children,
+							mediaFiles = [],
+							tracks = [];
 
 					for (var i = 0, total = children.length; i < total; i++) {
 						var childNode = children[i];
@@ -3778,7 +3778,7 @@ var MediaElementPlayer = function () {
 				t.layers = t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'layers');
 
 				var tagType = t.isVideo ? 'video' : 'audio',
-				    capsTagName = tagType.substring(0, 1).toUpperCase() + tagType.substring(1);
+						capsTagName = tagType.substring(0, 1).toUpperCase() + tagType.substring(1);
 
 				if (t.options[tagType + 'Width'] > 0 || t.options[tagType + 'Width'].toString().indexOf('%') > -1) {
 					t.width = t.options[tagType + 'Width'];
@@ -3981,9 +3981,9 @@ var MediaElementPlayer = function () {
 		key: '_meReady',
 		value: function _meReady(media, domNode) {
 			var t = this,
-			    autoplayAttr = domNode.getAttribute('autoplay'),
-			    autoplay = !(autoplayAttr === undefined || autoplayAttr === null || autoplayAttr === 'false'),
-			    isNative = media.rendererName !== null && /(native|html5)/i.test(t.media.rendererName);
+					autoplayAttr = domNode.getAttribute('autoplay'),
+					autoplay = !(autoplayAttr === undefined || autoplayAttr === null || autoplayAttr === 'false'),
+					isNative = media.rendererName !== null && /(native|html5)/i.test(t.media.rendererName);
 
 			if (t.getElement(t.controls)) {
 				t.enableControls();
@@ -4047,7 +4047,7 @@ var MediaElementPlayer = function () {
 
 						if (t.options.clickToPlayPause) {
 							var button = t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'overlay-button'),
-							    pressed = button.getAttribute('aria-pressed');
+									pressed = button.getAttribute('aria-pressed');
 
 							if (t.paused && pressed) {
 								t.pause();
@@ -4268,7 +4268,7 @@ var MediaElementPlayer = function () {
 		key: '_handleError',
 		value: function _handleError(e, media, node) {
 			var t = this,
-			    play = t.getElement(t.layers).querySelector('.' + t.options.classPrefix + 'overlay-play');
+					play = t.getElement(t.layers).querySelector('.' + t.options.classPrefix + 'overlay-play');
 
 			if (play) {
 				play.style.display = 'none';
@@ -4288,7 +4288,7 @@ var MediaElementPlayer = function () {
 			errorContainer.style.height = '100%';
 
 			var errorContent = typeof t.options.customError === 'function' ? t.options.customError(t.media, t.media.originalNode) : t.options.customError,
-			    imgError = '';
+					imgError = '';
 
 			if (!errorContent) {
 				var poster = t.media.originalNode.getAttribute('poster');
@@ -4370,10 +4370,10 @@ var MediaElementPlayer = function () {
 		key: 'setResponsiveMode',
 		value: function setResponsiveMode() {
 			var t = this,
-			    parent = function () {
+					parent = function () {
 
 				var parentEl = void 0,
-				    el = t.getElement(t.container);
+						el = t.getElement(t.container);
 
 				while (el) {
 					try {
@@ -4394,8 +4394,8 @@ var MediaElementPlayer = function () {
 
 				return null;
 			}(),
-			    parentStyles = parent ? getComputedStyle(parent, null) : getComputedStyle(_document2.default.body, null),
-			    nativeWidth = function () {
+					parentStyles = parent ? getComputedStyle(parent, null) : getComputedStyle(_document2.default.body, null),
+					nativeWidth = function () {
 				if (t.isVideo) {
 					if (t.media.videoWidth && t.media.videoWidth > 0) {
 						return t.media.videoWidth;
@@ -4408,7 +4408,7 @@ var MediaElementPlayer = function () {
 					return t.options.defaultAudioWidth;
 				}
 			}(),
-			    nativeHeight = function () {
+					nativeHeight = function () {
 				if (t.isVideo) {
 					if (t.media.videoHeight && t.media.videoHeight > 0) {
 						return t.media.videoHeight;
@@ -4421,7 +4421,7 @@ var MediaElementPlayer = function () {
 					return t.options.defaultAudioHeight;
 				}
 			}(),
-			    aspectRatio = function () {
+					aspectRatio = function () {
 				var ratio = 1;
 				if (!t.isVideo) {
 					return ratio;
@@ -4439,10 +4439,10 @@ var MediaElementPlayer = function () {
 
 				return ratio;
 			}(),
-			    parentHeight = parseFloat(parentStyles.height);
+					parentHeight = parseFloat(parentStyles.height);
 
 			var newHeight = void 0,
-			    parentWidth = parseFloat(parentStyles.width);
+					parentWidth = parseFloat(parentStyles.width);
 
 			if (t.isVideo) {
 				if (t.height === '100%') {
@@ -4488,7 +4488,7 @@ var MediaElementPlayer = function () {
 			var isIframe = _window2.default.self !== _window2.default.top && _window2.default.frameElement !== null;
 			var parent = function () {
 				var parentEl = void 0,
-				    el = t.getElement(t.container);
+						el = t.getElement(t.container);
 
 				while (el) {
 					try {
@@ -4545,7 +4545,7 @@ var MediaElementPlayer = function () {
 			parentStyles = getComputedStyle(parent);
 
 			var parentWidth = parseFloat(parentStyles.width),
-			    parentHeight = parseFloat(parentStyles.height);
+					parentHeight = parseFloat(parentStyles.height);
 
 			t.setDimensions('100%', '100%');
 
@@ -4555,17 +4555,17 @@ var MediaElementPlayer = function () {
 			}
 
 			var targetElement = t.getElement(t.container).querySelectorAll('object, embed, iframe, video'),
-			    initHeight = t.height,
-			    initWidth = t.width,
-			    scaleX1 = parentWidth,
-			    scaleY1 = initHeight * parentWidth / initWidth,
-			    scaleX2 = initWidth * parentHeight / initHeight,
-			    scaleY2 = parentHeight,
-			    bScaleOnWidth = scaleX2 > parentWidth === false,
-			    finalWidth = bScaleOnWidth ? Math.floor(scaleX1) : Math.floor(scaleX2),
-			    finalHeight = bScaleOnWidth ? Math.floor(scaleY1) : Math.floor(scaleY2),
-			    width = bScaleOnWidth ? parentWidth + 'px' : finalWidth + 'px',
-			    height = bScaleOnWidth ? finalHeight + 'px' : parentHeight + 'px';
+					initHeight = t.height,
+					initWidth = t.width,
+					scaleX1 = parentWidth,
+					scaleY1 = initHeight * parentWidth / initWidth,
+					scaleX2 = initWidth * parentHeight / initHeight,
+					scaleY2 = parentHeight,
+					bScaleOnWidth = scaleX2 > parentWidth === false,
+					finalWidth = bScaleOnWidth ? Math.floor(scaleX1) : Math.floor(scaleX2),
+					finalHeight = bScaleOnWidth ? Math.floor(scaleY1) : Math.floor(scaleY2),
+					width = bScaleOnWidth ? parentWidth + 'px' : finalWidth + 'px',
+					height = bScaleOnWidth ? finalHeight + 'px' : parentHeight + 'px';
 
 			for (var i = 0, total = targetElement.length; i < total; i++) {
 				targetElement[i].style.height = height;
@@ -4606,16 +4606,16 @@ var MediaElementPlayer = function () {
 
 			if (t.rail && dom.visible(t.rail)) {
 				var totalStyles = t.total ? getComputedStyle(t.total, null) : null,
-				    totalMargin = totalStyles ? parseFloat(totalStyles.marginLeft) + parseFloat(totalStyles.marginRight) : 0,
-				    railStyles = getComputedStyle(t.rail),
-				    railMargin = parseFloat(railStyles.marginLeft) + parseFloat(railStyles.marginRight);
+						totalMargin = totalStyles ? parseFloat(totalStyles.marginLeft) + parseFloat(totalStyles.marginRight) : 0,
+						railStyles = getComputedStyle(t.rail),
+						railMargin = parseFloat(railStyles.marginLeft) + parseFloat(railStyles.marginRight);
 
 				var siblingsWidth = 0;
 
 				var siblings = dom.siblings(t.rail, function (el) {
 					return el !== t.rail;
 				}),
-				    total = siblings.length;
+						total = siblings.length;
 				for (var i = 0; i < total; i++) {
 					siblingsWidth += siblings[i].offsetWidth;
 				}
@@ -4665,7 +4665,7 @@ var MediaElementPlayer = function () {
 			if (t.isVideo && t.media.rendererName !== null && t.media.rendererName.indexOf('iframe') > -1 && !_document2.default.getElementById(t.media.id + '-iframe-overlay')) {
 
 				var layer = _document2.default.createElement('div'),
-				    target = _document2.default.getElementById(t.media.id + '_' + t.media.rendererName);
+						target = _document2.default.getElementById(t.media.id + '_' + t.media.rendererName);
 
 				layer.id = t.media.id + '-iframe-overlay';
 				layer.className = t.options.classPrefix + 'iframe-overlay';
@@ -4748,7 +4748,7 @@ var MediaElementPlayer = function () {
 		key: 'globalBind',
 		value: function globalBind(events, callback) {
 			var t = this,
-			    doc = t.node ? t.node.ownerDocument : _document2.default;
+					doc = t.node ? t.node.ownerDocument : _document2.default;
 
 			events = (0, _general.splitEvents)(events, t.id);
 			if (events.d) {
@@ -4774,7 +4774,7 @@ var MediaElementPlayer = function () {
 		key: 'globalUnbind',
 		value: function globalUnbind(events, callback) {
 			var t = this,
-			    doc = t.node ? t.node.ownerDocument : _document2.default;
+					doc = t.node ? t.node.ownerDocument : _document2.default;
 
 			events = (0, _general.splitEvents)(events, t.id);
 			if (events.d) {
@@ -4816,7 +4816,7 @@ var MediaElementPlayer = function () {
 		key: 'buildposter',
 		value: function buildposter(player, controls, layers, media) {
 			var t = this,
-			    poster = _document2.default.createElement('div');
+					poster = _document2.default.createElement('div');
 
 			poster.className = t.options.classPrefix + 'poster ' + t.options.classPrefix + 'layer';
 			layers.appendChild(poster);
@@ -4873,9 +4873,9 @@ var MediaElementPlayer = function () {
 			}
 
 			var t = this,
-			    loading = _document2.default.createElement('div'),
-			    error = _document2.default.createElement('div'),
-			    bigPlay = _document2.default.createElement('div');
+					loading = _document2.default.createElement('div'),
+					error = _document2.default.createElement('div'),
+					bigPlay = _document2.default.createElement('div');
 
 			loading.style.display = 'none';
 			loading.className = t.options.classPrefix + 'overlay ' + t.options.classPrefix + 'layer';
@@ -4893,7 +4893,7 @@ var MediaElementPlayer = function () {
 				if (t.options.clickToPlayPause) {
 
 					var button = t.getElement(t.container).querySelector('.' + t.options.classPrefix + 'overlay-button'),
-					    pressed = button.getAttribute('aria-pressed');
+							pressed = button.getAttribute('aria-pressed');
 
 					if (t.paused) {
 						t.play();
@@ -5009,7 +5009,7 @@ var MediaElementPlayer = function () {
 
 			t.globalKeydownCallback = function (event) {
 				var container = _document2.default.activeElement.closest('.' + t.options.classPrefix + 'container'),
-				    target = t.media.closest('.' + t.options.classPrefix + 'container');
+						target = t.media.closest('.' + t.options.classPrefix + 'container');
 				t.hasFocus = !!(container && target && container.id === target.id);
 				return t.onkeydown(player, media, event);
 			};
@@ -5110,8 +5110,8 @@ var MediaElementPlayer = function () {
 		key: 'remove',
 		value: function remove() {
 			var t = this,
-			    rendererName = t.media.rendererName,
-			    src = t.media.originalNode.src;
+					rendererName = t.media.rendererName,
+					src = t.media.originalNode.src;
 
 			for (var featureIndex in t.options.features) {
 				var feature = t.options.features[featureIndex];
@@ -5125,7 +5125,7 @@ var MediaElementPlayer = function () {
 			}
 
 			var nativeWidth = t.node.getAttribute('width'),
-			    nativeHeight = t.node.getAttribute('height');
+					nativeHeight = t.node.getAttribute('height');
 
 			if (nativeWidth) {
 				if (nativeWidth.indexOf('%') === -1) {
@@ -5377,7 +5377,7 @@ var DefaultPlayer = function () {
 		key: 'setSrc',
 		value: function setSrc(src) {
 			var t = this,
-			    layer = document.getElementById(t.media.id + '-iframe-overlay');
+					layer = document.getElementById(t.media.id + '-iframe-overlay');
 
 			if (layer) {
 				layer.remove();
@@ -5586,12 +5586,12 @@ var DashNativeRenderer = {
 	create: function create(mediaElement, options, mediaFiles) {
 
 		var originalNode = mediaElement.originalNode,
-		    id = mediaElement.id + '_' + options.prefix,
-		    autoplay = originalNode.autoplay,
-		    children = originalNode.children;
+				id = mediaElement.id + '_' + options.prefix,
+				autoplay = originalNode.autoplay,
+				children = originalNode.children;
 
 		var node = null,
-		    dashPlayer = null;
+				dashPlayer = null;
 
 		originalNode.removeAttribute('type');
 		for (var i = 0, total = children.length; i < total; i++) {
@@ -5602,14 +5602,14 @@ var DashNativeRenderer = {
 		options = Object.assign(options, mediaElement.options);
 
 		var props = _mejs2.default.html5media.properties,
-		    events = _mejs2.default.html5media.events.concat(['click', 'mouseover', 'mouseout']),
-		    attachNativeEvents = function attachNativeEvents(e) {
+				events = _mejs2.default.html5media.events.concat(['click', 'mouseover', 'mouseout']),
+				attachNativeEvents = function attachNativeEvents(e) {
 			if (e.type !== 'error') {
 				var _event = (0, _general.createEvent)(e.type, mediaElement);
 				mediaElement.dispatchEvent(_event);
 			}
 		},
-		    assignGettersSetters = function assignGettersSetters(propName) {
+				assignGettersSetters = function assignGettersSetters(propName) {
 			var capName = '' + propName.substring(0, 1).toUpperCase() + propName.substring(1);
 
 			node['get' + capName] = function () {
@@ -5657,7 +5657,7 @@ var DashNativeRenderer = {
 			mediaElement.dashPlayer = dashPlayer = _dashPlayer;
 
 			var dashEvents = dashjs.MediaPlayer.events,
-			    assignEvents = function assignEvents(eventName) {
+					assignEvents = function assignEvents(eventName) {
 				if (eventName === 'loadedmetadata') {
 					dashPlayer.getDebug().setLogToBrowserConsole(options.dash.debug);
 					dashPlayer.initialize();
@@ -5818,8 +5818,8 @@ var PluginDetector = exports.PluginDetector = {
 	detectPlugin: function detectPlugin(pluginName, mimeType, activeX, axDetect) {
 
 		var version = [0, 0, 0],
-		    description = void 0,
-		    ax = void 0;
+				description = void 0,
+				ax = void 0;
 
 		if (_constants.NAV.plugins !== null && _constants.NAV.plugins !== undefined && _typeof(_constants.NAV.plugins[pluginName]) === 'object') {
 			description = _constants.NAV.plugins[pluginName].description;
@@ -5845,7 +5845,7 @@ var PluginDetector = exports.PluginDetector = {
 
 PluginDetector.addPlugin('flash', 'Shockwave Flash', 'application/x-shockwave-flash', 'ShockwaveFlash.ShockwaveFlash', function (ax) {
 	var version = [],
-	    d = ax.GetVariable("$version");
+			d = ax.GetVariable("$version");
 
 	if (d) {
 		d = d.split(" ")[1].split(",");
@@ -5868,7 +5868,7 @@ var FlashMediaElementRenderer = {
 		flash.flashApiStack = [];
 
 		var props = _mejs2.default.html5media.properties,
-		    assignGettersSetters = function assignGettersSetters(propName) {
+				assignGettersSetters = function assignGettersSetters(propName) {
 			flash.flashState[propName] = null;
 
 			var capName = '' + propName.substring(0, 1).toUpperCase() + propName.substring(1);
@@ -5924,7 +5924,7 @@ var FlashMediaElementRenderer = {
 		}
 
 		var methods = _mejs2.default.html5media.methods,
-		    assignMethods = function assignMethods(methodName) {
+				assignMethods = function assignMethods(methodName) {
 			flash[methodName] = function () {
 				if (isActive) {
 					if (flash.flashApi !== null) {
@@ -5969,7 +5969,7 @@ var FlashMediaElementRenderer = {
 
 					if (stackItem.type === 'set') {
 						var propName = stackItem.propName,
-						    capName = '' + propName.substring(0, 1).toUpperCase() + propName.substring(1);
+								capName = '' + propName.substring(0, 1).toUpperCase() + propName.substring(1);
 
 						flash['set' + capName](stackItem.value);
 					} else if (stackItem.type === 'call') {
@@ -6000,10 +6000,10 @@ var FlashMediaElementRenderer = {
 		}
 
 		var autoplay = mediaElement.originalNode.autoplay,
-		    flashVars = ['uid=' + flash.id, 'autoplay=' + autoplay, 'allowScriptAccess=' + flash.options.shimScriptAccess, 'preload=' + (mediaElement.originalNode.getAttribute('preload') || '')],
-		    isVideo = mediaElement.originalNode !== null && mediaElement.originalNode.tagName.toLowerCase() === 'video',
-		    flashHeight = isVideo ? mediaElement.originalNode.height : 1,
-		    flashWidth = isVideo ? mediaElement.originalNode.width : 1;
+				flashVars = ['uid=' + flash.id, 'autoplay=' + autoplay, 'allowScriptAccess=' + flash.options.shimScriptAccess, 'preload=' + (mediaElement.originalNode.getAttribute('preload') || '')],
+				isVideo = mediaElement.originalNode !== null && mediaElement.originalNode.tagName.toLowerCase() === 'video',
+				flashHeight = isVideo ? mediaElement.originalNode.height : 1,
+				flashWidth = isVideo ? mediaElement.originalNode.width : 1;
 
 		if (mediaElement.originalNode.getAttribute('src')) {
 			flashVars.push('src=' + mediaElement.originalNode.getAttribute('src'));
@@ -6283,23 +6283,23 @@ var FlvNativeRenderer = {
 	create: function create(mediaElement, options, mediaFiles) {
 
 		var originalNode = mediaElement.originalNode,
-		    id = mediaElement.id + '_' + options.prefix;
+				id = mediaElement.id + '_' + options.prefix;
 
 		var node = null,
-		    flvPlayer = null;
+				flvPlayer = null;
 
 		node = originalNode.cloneNode(true);
 		options = Object.assign(options, mediaElement.options);
 
 		var props = _mejs2.default.html5media.properties,
-		    events = _mejs2.default.html5media.events.concat(['click', 'mouseover', 'mouseout']),
-		    attachNativeEvents = function attachNativeEvents(e) {
+				events = _mejs2.default.html5media.events.concat(['click', 'mouseover', 'mouseout']),
+				attachNativeEvents = function attachNativeEvents(e) {
 			if (e.type !== 'error') {
 				var _event = (0, _general.createEvent)(e.type, mediaElement);
 				mediaElement.dispatchEvent(_event);
 			}
 		},
-		    assignGettersSetters = function assignGettersSetters(propName) {
+				assignGettersSetters = function assignGettersSetters(propName) {
 			var capName = '' + propName.substring(0, 1).toUpperCase() + propName.substring(1);
 
 			node['get' + capName] = function () {
@@ -6346,7 +6346,7 @@ var FlvNativeRenderer = {
 			mediaElement.flvPlayer = flvPlayer = _flvPlayer;
 
 			var flvEvents = flvjs.Events,
-			    assignEvents = function assignEvents(eventName) {
+					assignEvents = function assignEvents(eventName) {
 				if (eventName === 'loadedmetadata') {
 					flvPlayer.unload();
 					flvPlayer.detachMediaElement();
@@ -6530,28 +6530,28 @@ var HlsNativeRenderer = {
 	create: function create(mediaElement, options, mediaFiles) {
 
 		var originalNode = mediaElement.originalNode,
-		    id = mediaElement.id + '_' + options.prefix,
-		    preload = originalNode.getAttribute('preload'),
-		    autoplay = originalNode.autoplay;
+				id = mediaElement.id + '_' + options.prefix,
+				preload = originalNode.getAttribute('preload'),
+				autoplay = originalNode.autoplay;
 
 		var hlsPlayer = null,
-		    node = null,
-		    index = 0,
-		    total = mediaFiles.length;
+				node = null,
+				index = 0,
+				total = mediaFiles.length;
 
 		node = originalNode.cloneNode(true);
 		options = Object.assign(options, mediaElement.options);
 		options.hls.autoStartLoad = preload && preload !== 'none' || autoplay;
 
 		var props = _mejs2.default.html5media.properties,
-		    events = _mejs2.default.html5media.events.concat(['click', 'mouseover', 'mouseout']),
-		    attachNativeEvents = function attachNativeEvents(e) {
+				events = _mejs2.default.html5media.events.concat(['click', 'mouseover', 'mouseout']),
+				attachNativeEvents = function attachNativeEvents(e) {
 			if (e.type !== 'error') {
 				var _event = (0, _general.createEvent)(e.type, mediaElement);
 				mediaElement.dispatchEvent(_event);
 			}
 		},
-		    assignGettersSetters = function assignGettersSetters(propName) {
+				assignGettersSetters = function assignGettersSetters(propName) {
 			var capName = '' + propName.substring(0, 1).toUpperCase() + propName.substring(1);
 
 			node['get' + capName] = function () {
@@ -6588,7 +6588,7 @@ var HlsNativeRenderer = {
 		_window2.default['__ready__' + id] = function (_hlsPlayer) {
 			mediaElement.hlsPlayer = hlsPlayer = _hlsPlayer;
 			var hlsEvents = Hls.Events,
-			    assignEvents = function assignEvents(eventName) {
+					assignEvents = function assignEvents(eventName) {
 				if (eventName === 'loadedmetadata') {
 					var url = mediaElement.originalNode.src;
 					hlsPlayer.detachMedia();
@@ -6604,7 +6604,7 @@ var HlsNativeRenderer = {
 			}
 
 			var recoverDecodingErrorDate = void 0,
-			    recoverSwapAudioCodecDate = void 0;
+					recoverSwapAudioCodecDate = void 0;
 			var assignHlsEvents = function assignHlsEvents(name, data) {
 				if (name === 'hlsError') {
 					console.warn(data);
@@ -6804,7 +6804,7 @@ var HtmlMediaElement = {
 		node.setAttribute('id', id);
 
 		var props = _mejs2.default.html5media.properties,
-		    assignGettersSetters = function assignGettersSetters(propName) {
+				assignGettersSetters = function assignGettersSetters(propName) {
 			var capName = '' + propName.substring(0, 1).toUpperCase() + propName.substring(1);
 
 			node['get' + capName] = function () {
@@ -6823,7 +6823,7 @@ var HtmlMediaElement = {
 		}
 
 		var events = _mejs2.default.html5media.events.concat(['click', 'mouseover', 'mouseout']),
-		    assignEvents = function assignEvents(eventName) {
+				assignEvents = function assignEvents(eventName) {
 			node.addEventListener(eventName, function (e) {
 				if (isActive) {
 					var _event = (0, _general.createEvent)(e.type, e.target);
@@ -6857,7 +6857,7 @@ var HtmlMediaElement = {
 		};
 
 		var index = 0,
-		    total = mediaFiles.length;
+				total = mediaFiles.length;
 		if (total > 0) {
 			for (; index < total; index++) {
 				if (_renderer.renderer.renderers[options.prefix].canPlayType(mediaFiles[index].type)) {
@@ -6981,7 +6981,7 @@ var YouTubeApi = {
 		}
 
 		var parts = url.split('?'),
-		    parameters = parts[1].split('&');
+				parameters = parts[1].split('&');
 
 		var youTubeId = '';
 
@@ -7050,21 +7050,21 @@ var YouTubeIframeRenderer = {
 	create: function create(mediaElement, options, mediaFiles) {
 
 		var youtube = {},
-		    apiStack = [],
-		    readyState = 4;
+				apiStack = [],
+				readyState = 4;
 
 		var youTubeApi = null,
-		    paused = true,
-		    ended = false,
-		    youTubeIframe = null,
-		    volume = 1;
+				paused = true,
+				ended = false,
+				youTubeIframe = null,
+				volume = 1;
 
 		youtube.options = options;
 		youtube.id = mediaElement.id + '_' + options.prefix;
 		youtube.mediaElement = mediaElement;
 
 		var props = _mejs2.default.html5media.properties,
-		    assignGettersSetters = function assignGettersSetters(propName) {
+				assignGettersSetters = function assignGettersSetters(propName) {
 
 			var capName = '' + propName.substring(0, 1).toUpperCase() + propName.substring(1);
 
@@ -7088,7 +7088,7 @@ var YouTubeIframeRenderer = {
 							return youTubeApi.isMuted();
 						case 'buffered':
 							var percentLoaded = youTubeApi.getVideoLoadedFraction(),
-							    duration = youTubeApi.getDuration();
+									duration = youTubeApi.getDuration();
 							return {
 								start: function start() {
 									return 0;
@@ -7115,7 +7115,7 @@ var YouTubeIframeRenderer = {
 					switch (propName) {
 						case 'src':
 							var url = typeof value === 'string' ? value : value[0].src,
-							    _videoId = YouTubeApi.getYouTubeId(url);
+									_videoId = YouTubeApi.getYouTubeId(url);
 
 							if (mediaElement.originalNode.autoplay) {
 								youTubeApi.loadVideoById(_videoId);
@@ -7164,7 +7164,7 @@ var YouTubeIframeRenderer = {
 		}
 
 		var methods = _mejs2.default.html5media.methods,
-		    assignMethods = function assignMethods(methodName) {
+				assignMethods = function assignMethods(methodName) {
 			youtube[methodName] = function () {
 				if (youTubeApi !== null) {
 					switch (methodName) {
@@ -7198,10 +7198,10 @@ var YouTubeIframeRenderer = {
 		mediaElement.originalNode.style.display = 'none';
 
 		var isAudio = mediaElement.originalNode.tagName.toLowerCase() === 'audio',
-		    height = isAudio ? '1' : mediaElement.originalNode.height,
-		    width = isAudio ? '1' : mediaElement.originalNode.width,
-		    videoId = YouTubeApi.getYouTubeId(mediaFiles[0].src),
-		    youtubeSettings = {
+				height = isAudio ? '1' : mediaElement.originalNode.height,
+				width = isAudio ? '1' : mediaElement.originalNode.width,
+				videoId = YouTubeApi.getYouTubeId(mediaFiles[0].src),
+				youtubeSettings = {
 			id: youtube.id,
 			containerId: youtubeContainer.id,
 			videoId: videoId,
@@ -7232,7 +7232,7 @@ var YouTubeIframeRenderer = {
 
 							if (stackItem.type === 'set') {
 								var propName = stackItem.propName,
-								    capName = '' + propName.substring(0, 1).toUpperCase() + propName.substring(1);
+										capName = '' + propName.substring(0, 1).toUpperCase() + propName.substring(1);
 
 								youtube['set' + capName](stackItem.value);
 							} else if (stackItem.type === 'call') {
@@ -7248,7 +7248,7 @@ var YouTubeIframeRenderer = {
 					}
 
 					var events = ['mouseover', 'mouseout'],
-					    assignEvents = function assignEvents(e) {
+							assignEvents = function assignEvents(e) {
 						var newEvent = (0, _general.createEvent)(e.type, youtube);
 						mediaElement.dispatchEvent(newEvent);
 					};
@@ -7374,8 +7374,8 @@ var YouTubeIframeRenderer = {
 		};
 		youtube.getPosterUrl = function () {
 			var quality = options.youtube.imageQuality,
-			    resolutions = ['default', 'hqdefault', 'mqdefault', 'sddefault', 'maxresdefault'],
-			    id = YouTubeApi.getYouTubeId(mediaElement.originalNode.src);
+					resolutions = ['default', 'hqdefault', 'mqdefault', 'sddefault', 'maxresdefault'],
+					id = YouTubeApi.getYouTubeId(mediaElement.originalNode.src);
 			return quality && resolutions.indexOf(quality) > -1 && id ? 'https://img.youtube.com/vi/' + id + '/' + quality + '.jpg' : '';
 		};
 
@@ -7432,8 +7432,8 @@ var IS_STOCK_ANDROID = exports.IS_STOCK_ANDROID = /^mozilla\/\d+\.\d+\s\(linux;\
 var HAS_MSE = exports.HAS_MSE = 'MediaSource' in _window2.default;
 var SUPPORT_POINTER_EVENTS = exports.SUPPORT_POINTER_EVENTS = function () {
 	var element = _document2.default.createElement('x'),
-	    documentElement = _document2.default.documentElement,
-	    getComputedStyle = _window2.default.getComputedStyle;
+			documentElement = _document2.default.documentElement,
+			getComputedStyle = _window2.default.getComputedStyle;
 
 	if (!('pointerEvents' in element.style)) {
 		return false;
@@ -7486,8 +7486,8 @@ var hasTrueNativeFullScreen = hasWebkitNativeFullScreen || hasMozNativeFullScree
 var nativeFullScreenEnabled = hasTrueNativeFullScreen;
 var fullScreenEventName = '';
 var isFullScreen = void 0,
-    requestFullScreen = void 0,
-    cancelFullScreen = void 0;
+		requestFullScreen = void 0,
+		cancelFullScreen = void 0;
 
 if (hasMozNativeFullScreen) {
 	nativeFullScreenEnabled = _document2.default.mozFullScreenEnabled;
@@ -7629,14 +7629,14 @@ function loadScript(url) {
 
 function offset(el) {
 	var rect = el.getBoundingClientRect(),
-	    scrollLeft = _window2.default.pageXOffset || _document2.default.documentElement.scrollLeft,
-	    scrollTop = _window2.default.pageYOffset || _document2.default.documentElement.scrollTop;
+			scrollLeft = _window2.default.pageXOffset || _document2.default.documentElement.scrollLeft,
+			scrollTop = _window2.default.pageYOffset || _document2.default.documentElement.scrollTop;
 	return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
 }
 
 var hasClassMethod = void 0,
-    addClassMethod = void 0,
-    removeClassMethod = void 0;
+		addClassMethod = void 0,
+		removeClassMethod = void 0;
 
 if ('classList' in _document2.default.documentElement) {
 	hasClassMethod = function hasClassMethod(el, className) {
@@ -7740,8 +7740,8 @@ function ajax(url, dataType, success, error) {
 	var xhr = _window2.default.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 
 	var type = 'application/x-www-form-urlencoded; charset=UTF-8',
-	    completed = false,
-	    accept = '*/'.concat('*');
+			completed = false,
+			accept = '*/'.concat('*');
 
 	switch (dataType) {
 		case 'text':
@@ -7849,7 +7849,7 @@ function escapeHTML(input) {
 
 function debounce(func, wait) {
 	var _this = this,
-	    _arguments = arguments;
+			_arguments = arguments;
 
 	var immediate = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
@@ -7865,7 +7865,7 @@ function debounce(func, wait) {
 	var timeout = void 0;
 	return function () {
 		var context = _this,
-		    args = _arguments;
+				args = _arguments;
 		var later = function later() {
 			timeout = null;
 			if (!immediate) {
@@ -7913,7 +7913,7 @@ function createEvent(eventName, target) {
 	}
 
 	var eventFrags = eventName.match(/([a-z]+\.([a-z]+))/i),
-	    detail = {
+			detail = {
 		target: target
 	};
 
@@ -8010,7 +8010,7 @@ function getTypeFromFile(url) {
 	}
 
 	var ext = getExtension(url),
-	    normalizedExt = normalizeExtension(ext);
+			normalizedExt = normalizeExtension(ext);
 
 	var mime = 'video/mp4';
 
@@ -8032,7 +8032,7 @@ function getExtension(url) {
 	}
 
 	var baseUrl = url.split('?')[0],
-	    baseName = baseUrl.split('\\').pop().split('/').pop();
+			baseName = baseUrl.split('\\').pop().split('/').pop();
 	return ~baseName.indexOf('.') ? baseName.substring(baseName.lastIndexOf('.') + 1) : '';
 }
 
@@ -8148,7 +8148,7 @@ if (!String.prototype.startsWith) {
 if (!Element.prototype.matches) {
 	Element.prototype.matches = Element.prototype.matchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || Element.prototype.oMatchesSelector || Element.prototype.webkitMatchesSelector || function (s) {
 		var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-		    i = matches.length - 1;
+				i = matches.length - 1;
 		while (--i >= 0 && matches.item(i) !== this) {}
 		return i > -1;
 	};
@@ -8157,8 +8157,8 @@ if (!Element.prototype.matches) {
 if (window.Element && !Element.prototype.closest) {
 	Element.prototype.closest = function (s) {
 		var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-		    i = void 0,
-		    el = this;
+				i = void 0,
+				el = this;
 		do {
 			i = matches.length;
 			while (--i >= 0 && matches.item(i) !== el) {}
@@ -8207,9 +8207,9 @@ if (!window.Promise) {
 		Object.defineProperty(constructor.prototype, 'children', {
 			get: function get() {
 				var i = 0,
-				    node = void 0,
-				    nodes = this.childNodes,
-				    children = [];
+						node = void 0,
+						nodes = this.childNodes,
+						children = [];
 				while (node = nodes[i++]) {
 					if (node.nodeType === 1) {
 						children.push(node);
@@ -8255,15 +8255,15 @@ function secondsToTimeCode(time) {
 	time = !time || typeof time !== 'number' || time < 0 ? 0 : time;
 
 	var dropFrames = Math.round(fps * 0.066666),
-	    timeBase = Math.round(fps),
-	    framesPer24Hours = Math.round(fps * 3600) * 24,
-	    framesPer10Minutes = Math.round(fps * 600),
-	    frameSep = isDropFrame(fps) ? ';' : ':',
-	    hours = void 0,
-	    minutes = void 0,
-	    seconds = void 0,
-	    frames = void 0,
-	    f = Math.round(time * fps);
+			timeBase = Math.round(fps),
+			framesPer24Hours = Math.round(fps * 3600) * 24,
+			framesPer10Minutes = Math.round(fps * 600),
+			frameSep = isDropFrame(fps) ? ';' : ':',
+			hours = void 0,
+			minutes = void 0,
+			seconds = void 0,
+			frames = void 0,
+			f = Math.round(time * fps);
 
 	if (isDropFrame(fps)) {
 
@@ -8349,15 +8349,15 @@ function timeCodeToSeconds(time) {
 	var parts = time.split(':');
 
 	var output = void 0,
-	    hours = 0,
-	    minutes = 0,
-	    seconds = 0,
-	    frames = 0,
-	    totalMinutes = 0,
-	    dropFrames = Math.round(fps * 0.066666),
-	    timeBase = Math.round(fps),
-	    hFrames = timeBase * 3600,
-	    mFrames = timeBase * 60;
+			hours = 0,
+			minutes = 0,
+			seconds = 0,
+			frames = 0,
+			totalMinutes = 0,
+			dropFrames = Math.round(fps * 0.066666),
+			timeBase = Math.round(fps),
+			hFrames = timeBase * 3600,
+			mFrames = timeBase * 60;
 
 	switch (parts.length) {
 		default:
@@ -8398,17 +8398,17 @@ function calculateTimeFormat(time, options) {
 	time = !time || typeof time !== 'number' || time < 0 ? 0 : time;
 
 	var hours = Math.floor(time / 3600) % 24,
-	    minutes = Math.floor(time / 60) % 60,
-	    seconds = Math.floor(time % 60),
-	    frames = Math.floor((time % 1 * fps).toFixed(3)),
-	    lis = [[frames, 'f'], [seconds, 's'], [minutes, 'm'], [hours, 'h']];
+			minutes = Math.floor(time / 60) % 60,
+			seconds = Math.floor(time % 60),
+			frames = Math.floor((time % 1 * fps).toFixed(3)),
+			lis = [[frames, 'f'], [seconds, 's'], [minutes, 'm'], [hours, 'h']];
 
 	var format = options.timeFormat,
-	    firstTwoPlaces = format[1] === format[0],
-	    separatorIndex = firstTwoPlaces ? 2 : 1,
-	    separator = format.length < separatorIndex ? format[separatorIndex] : ':',
-	    firstChar = format[0],
-	    required = false;
+			firstTwoPlaces = format[1] === format[0],
+			separatorIndex = firstTwoPlaces ? 2 : 1,
+			separator = format.length < separatorIndex ? format[separatorIndex] : ':',
+			firstChar = format[0],
+			required = false;
 
 	for (var i = 0, len = lis.length; i < len; i++) {
 		if (~format.indexOf(lis[i][1])) {
@@ -8451,7 +8451,7 @@ function convertSMPTEtoSeconds(SMPTE) {
 	var decimalLen = ~SMPTE.indexOf('.') ? SMPTE.split('.')[1].length : 0;
 
 	var secs = 0,
-	    multiplier = 1;
+			multiplier = 1;
 
 	SMPTE = SMPTE.split(':').reverse();
 
