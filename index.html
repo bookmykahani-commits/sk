@@ -19,182 +19,7 @@ Send your story on WhatsApp or Telegram and get a realistic, emotion-filled huma
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 	<link rel="stylesheet" href="assets/css/style.css">
-
-	<style id="anii-inline-style">
-        html {
-            scroll-behavior: smooth; /* still use JS for exact offset handling */
-        }
-        /* Active menu link */
-        #site-menu a.active {
-            color: #ffbd14;
-        }
-		.sales-box {
-			background-image: url(tmp/sample-sales-background.jpg);
-		}
-        .question {
-            font-size: 1.2rem;
-            font-weight: 600;
-            padding: 20px 80px 20px 20px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .question::after {
-            content: "\002B";
-            font-size: 2.2rem;
-            position: absolute;
-            right: 20px;
-            transition: 0.2s;
-        }
-
-        .question.active::after {
-            transform: rotate(45deg);
-        }
-
-        .answercont {
-            max-height: 0;
-            overflow: hidden;
-            transition: 0.3s;
-        }
-
-        .answer {
-            padding: 0 20px 20px;
-            line-height: 1.5rem;
-        }
-
-        .question.active + .answercont {
-        }
-
-        .home .cs-section {
-            padding-bottom: 2rem
-        }
-
-        @media (min-width: 768px) {
-            .home .cs-section {
-                padding-bottom:3rem
-            }
-        }
-
-        @media (min-width: 992px) {
-            .home .cs-section {
-                padding-bottom:4rem
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .home .cs-section {
-                padding-bottom:5rem
-            }
-        }
-
-        .home .cs-section h2 {
-            margin-top: 1rem;
-            margin-bottom: 1rem
-        }
-
-        @media screen and (max-width: 790px){
-            html {
-                font-size: 14px;
-            }
-            .wrapper {
-                width: 80%;
-            }
-        }
-
-
-        /*testimonial*/
-
-        .section-padding {
-            padding: 80px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-borders span {
-            height: 5px;
-            background: #f17a24;
-            width: 40px;
-            display: inline-block;
-            border-radius: 2px;
-        }
-
-        .section-borders span.black-border {
-            background: #333;
-            width: 30px;
-            margin: 0 6px;
-
-        }
-
-        .client-testimonial-carousel .owl-dots button {
-            height: 5px;
-            background: #f17a24 !important;
-            width: 20px;
-            display: inline-block;
-            margin: 5px;
-            transition: .2s;
-            border-radius: 2px;
-        }
-
-        .client-testimonial-carousel button.owl-dot.active {
-            background: #FFFFFF !important;
-            width: 30px;
-        }
-
-        .client-testimonial-carousel .owl-dots {
-            text-align: center;
-            margin-top: 25px
-        }
-
-        .single-testimonial-item {
-            position: relative;
-            box-shadow: 0 0 2px #dadfd3;
-            margin: 2px;
-            padding: 20px;
-            font-style: italic;
-            padding-left: 85px;
-        }
-
-        .single-testimonial-item:before {
-            font-family: "Font Awesome 5 Free";
-            content: "\f10e";
-            font-weight: 900;
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            font-size: 20px;
-            color: #f17a24;
-            line-height: 30px;
-            margin-top: -15px;
-        }
-
-        .single-testimonial-item:after {
-            background: #ddd;
-            content: "";
-            height: 70%;
-            left: 60px;
-            position: absolute;
-            top: 10%;
-            width: 1px;
-        }
-
-        .single-testimonial-item h3 {
-            font-size: 20px;
-            font-style: normal;
-            margin-bottom: 0;
-        }
-
-        .single-testimonial-item h3 span {
-            display: block;
-            font-size: 12px;
-            font-weight: normal;
-            margin-top: 5px;
-        }
-	</style>
+	<link rel="stylesheet" href="assets/css/external.css">
 </head>
 <body class="home footer-sticky">
 	<header id="top">
@@ -791,6 +616,49 @@ Send your story on WhatsApp or Telegram and get a realistic, emotion-filled huma
 		</div>
 	</footer>
 
+    <div id='whatsapp-chat' class='hide'>
+        <div class='header-chat'>
+            <div class='head-home'>
+                <div class='info-avatar'><img src='https://files.elfsight.com/storage/9274ed8b-a2e8-4cf8-a4cf-fad383377f2b/7b75090c-19a2-452b-9d6b-c2a51ad4916f.jpeg' /></div>
+                <p><span class="whatsapp-name">vishwaoffl</span><br><small>Typically replies within an hour</small></p>
+
+            </div>
+            <div class='get-new hide'>
+                <div id='get-label'></div>
+                <div id='get-nama'></div>
+            </div>
+        </div>
+        <div class='home-chat'>
+
+        </div>
+        <div class='start-chat'>
+            <div pattern="https://elfsight.com/assets/chats/patterns/whatsapp.png" class="WhatsappChat__Component-sc-1wqac52-0 whatsapp-chat-body">
+                <div class="WhatsappChat__MessageContainer-sc-1wqac52-1 dAbFpq">
+                    <div style="opacity: 0;" class="WhatsappDots__Component-pks5bf-0 eJJEeC">
+                        <div class="WhatsappDots__ComponentInner-pks5bf-1 hFENyl">
+                            <div class="WhatsappDots__Dot-pks5bf-2 WhatsappDots__DotOne-pks5bf-3 ixsrax"></div>
+                            <div class="WhatsappDots__Dot-pks5bf-2 WhatsappDots__DotTwo-pks5bf-4 dRvxoz"></div>
+                            <div class="WhatsappDots__Dot-pks5bf-2 WhatsappDots__DotThree-pks5bf-5 kXBtNt"></div>
+                        </div>
+                    </div>
+                    <div style="opacity: 1;" class="WhatsappChat__Message-sc-1wqac52-4 kAZgZq">
+                        <div class="WhatsappChat__Author-sc-1wqac52-3 bMIBDo">vishwaoffl</div>
+                        <div class="WhatsappChat__Text-sc-1wqac52-2 iSpIQi">Hi there 👋<br><br>How can I help you?</div>
+                        <div class="WhatsappChat__Time-sc-1wqac52-5 cqCDVm">1:40</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class='blanter-msg'>
+                <textarea id='chat-input' placeholder='Write a response...' maxlength='120' row='1' class="no-scroll"></textarea>
+                <a href="javascript:void(0)" id='send-it'><svg viewBox="0 0 448 448"><path d="M.213 32L0 181.333 320 224 0 266.667.213 416 448 224z"/></svg></a>
+
+            </div>
+        </div>
+        <div id='get-number'></div><a class='close-chat' href="javascript:void(0)">×</a>
+   </div>
+    <a class='blantershow-chat' href="javascript:void(0)" title='Show Chat'><svg width="20" viewBox="0 0 24 24"><defs/><path fill="#eceff1" d="M20.5 3.4A12.1 12.1 0 0012 0 12 12 0 001.7 17.8L0 24l6.3-1.7c2.8 1.5 5 1.4 5.8 1.5a12 12 0 008.4-20.3z"/><path fill="#4caf50" d="M12 21.8c-3.1 0-5.2-1.6-5.4-1.6l-3.7 1 1-3.7-.3-.4A9.9 9.9 0 012.1 12a10 10 0 0117-7 9.9 9.9 0 01-7 16.9z"/><path fill="#fafafa" d="M17.5 14.3c-.3 0-1.8-.8-2-.9-.7-.2-.5 0-1.7 1.3-.1.2-.3.2-.6.1s-1.3-.5-2.4-1.5a9 9 0 01-1.7-2c-.3-.6.4-.6 1-1.7l-.1-.5-1-2.2c-.2-.6-.4-.5-.6-.5-.6 0-1 0-1.4.3-1.6 1.8-1.2 3.6.2 5.6 2.7 3.5 4.2 4.2 6.8 5 .7.3 1.4.3 1.9.2.6 0 1.7-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4z"/></svg> Chat with Us</a>
+
 	<script src="assets/js/jquery-3.2.1.min.js"></script>
 	<script src="assets/js/modernizr-custom.js"></script>
 	<script src="assets/js/functions.js"></script>
@@ -805,180 +673,7 @@ Send your story on WhatsApp or Telegram and get a realistic, emotion-filled huma
 	<script src="assets/js/mediaelement-anii.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-
-    <script>
-        $(document).ready(function(){
-            $(".owl-carousel").owlCarousel({
-                items:3,
-//      autoplay:false,
-                margin:30,
-                loop:true,
-                dots:true
-//      nav:true,
-//      navText:["<i class='fas fa-long-arrow-alt-left'></i>","<i class='fas fa-long-arrow-alt-right'></i>" ]
-            });
-        });
-    </script>
-    <script>
-        let question = document.querySelectorAll(".question");
-
-        question.forEach(question => {
-            question.addEventListener("click", event => {
-                const active = document.querySelector(".question.active");
-                if(active && active !== question ) {
-                    active.classList.toggle("active");
-                    active.nextElementSibling.style.maxHeight = 0;
-                }
-                question.classList.toggle("active");
-                const answer = question.nextElementSibling;
-                if(question.classList.contains("active")){
-                    answer.style.maxHeight = answer.scrollHeight + "px";
-                } else {
-                    answer.style.maxHeight = 0;
-                }
-            })
-        })
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const header = document.querySelector('.navbar') || document.querySelector('header');
-            const nav = document.getElementById('site-menu');
-            const navLinks = document.querySelectorAll('#site-menu a[data-scroll]');
-            const menuToggle = document.querySelector('.site-menu-toggle a') || null;
-
-            // helper: current header height
-            function headerHeight() {
-                return header ? header.getBoundingClientRect().height : 0;
-            }
-
-            // Smooth scroll with offset
-            function scrollToHash(hash) {
-                const target = document.querySelector(hash);
-                if (!target) return;
-                const y = target.getBoundingClientRect().top + window.scrollY - headerHeight() - 12; // 12px padding
-                window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
-            }
-
-            // click handlers for menu items
-            navLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
-                    const href = this.getAttribute('href');
-                    if (href && href.startsWith('#')) {
-                        e.preventDefault();
-                        // close mobile menu if open (basic)
-                        if (nav.classList.contains('expanded')) {
-                            nav.classList.remove('expanded');
-                            nav.classList.add('collapsed');
-                        }
-                        // scroll
-                        scrollToHash(href);
-                        // update URL hash without jumping
-                        history.replaceState(null, '', href);
-                    }
-                });
-            });
-
-            // Mobile toggle: basic show/hide nav (tweak for your CSS)
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    // toggle a class on nav to control visibility
-                    if (nav.classList.contains('expanded')) {
-                        nav.classList.remove('expanded');
-                        nav.classList.add('collapsed');
-                    } else {
-                        nav.classList.add('expanded');
-                        nav.classList.remove('collapsed');
-                    }
-                });
-            }
-
-            // IntersectionObserver to set active nav link
-            // Observe each major section that has an id referenced by nav links
-            const sections = Array.from(navLinks)
-                .map(l => l.getAttribute('href'))
-                .filter(Boolean)
-                .map(id => document.querySelector(id))
-                .filter(Boolean);
-
-            if ('IntersectionObserver' in window && sections.length) {
-                let headerH = headerHeight();
-                const ioOptions = {
-                    root: null,
-                    rootMargin: `-${headerH + 20}px 0px -40% 0px`, // top offset to account for header
-                    threshold: [0, 0.25, 0.6]
-                };
-
-                const observer = new IntersectionObserver(entries => {
-                    entries.forEach(entry => {
-                        const id = '#' + (entry.target.id || '');
-                        const matchingLink = document.querySelector('#site-menu a[href="' + id + '"]');
-                        if (entry.isIntersecting) {
-                            navLinks.forEach(a => a.classList.remove('active'));
-                            if (matchingLink) matchingLink.classList.add('active');
-                        }
-                    });
-                }, ioOptions);
-
-                sections.forEach(s => observer.observe(s));
-
-                // update observer if header size changes (e.g. on resize)
-                window.addEventListener('resize', () => {
-                    headerH = headerHeight();
-                    observer.disconnect();
-                    const newOptions = {
-                        root: null,
-                        rootMargin: `-${headerH + 20}px 0px -40% 0px`,
-                        threshold: [0, 0.25, 0.6]
-                    };
-                    // recreate
-                    const newObserver = new IntersectionObserver(entries => {
-                        entries.forEach(entry => {
-                            const id = '#' + (entry.target.id || '');
-                            const matchingLink = document.querySelector('#site-menu a[href="' + id + '"]');
-                            if (entry.isIntersecting) {
-                                navLinks.forEach(a => a.classList.remove('active'));
-                                if (matchingLink) matchingLink.classList.add('active');
-                            }
-                        });
-                    }, newOptions);
-                    sections.forEach(s => newObserver.observe(s));
-                });
-            } else {
-                // fallback: on scroll, find nearest section
-                window.addEventListener('scroll', function () {
-                    const fromTop = window.scrollY + headerHeight() + 15;
-                    let current = null;
-                    sections.forEach(section => {
-                        if (section.offsetTop <= fromTop) current = section;
-                    });
-                    if (current) {
-                        const id = '#' + current.id;
-                        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
-                    }
-                });
-            }
-
-            // If user lands with a hash, smoothly scroll to it on load
-            if (location.hash) {
-                // small timeout ensures layout & header height calculated
-                setTimeout(() => scrollToHash(location.hash), 50);
-            }
-        });
-    </script>
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-        (function(){
-            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-            s1.async=true;
-            s1.src='https://embed.tawk.to/69106927edad88195eb788ea/1j9k1lhcm';
-            s1.charset='UTF-8';
-            s1.setAttribute('crossorigin','*');
-            s0.parentNode.insertBefore(s1,s0);
-        })();
-    </script>
-    <!--End of Tawk.to Script-->
+    <script src="assets/js/main.js"></script>
 
 </body>
  </html>
