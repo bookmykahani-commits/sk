@@ -1,14 +1,13 @@
 <!doctype html>
 <html lang="en" class="no-js">
-
-<!-- Mirrored from html.liviucerchez.com/anii/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Oct 2025 15:40:00 GMT -->
 <head>
-	<title>Anii - HTML site template for audio podcasts</title>
+	<title>BookMyKahani | Real Human-Like Hindi Story Voices | WhatsApp & Telegram Audio Service</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<meta name="description" content="Anii is fully responsive creative audio podcast HTML site template that looks great on any device.">
-	<meta name="keywords" content="Anii, HTML, Template, Design, Development">
+	<meta name="description" content="Bring your stories to life with BookMyKahani! 🎙️
+Send your story on WhatsApp or Telegram and get a realistic, emotion-filled human voice narration in Hindi or multiple languages. Free samples available — perfect for YouTube, reels, and podcasts.">
+	<meta name="keywords" content="bookmykahani, hindi voice over, realistic story narration, text to speech hindi, audio story creator, whatsapp voice service, telegram audio story, human voice generator, hindi storytelling, free voice sample, youtube voiceover, emotional narration, kids story voice, female voice over, male voice over">
 
 	<link rel="shortcut icon" href="favicon.png">
 
@@ -16,12 +15,185 @@
 
 	<link rel="stylesheet" href="assets/css/materialdesignicons.css">
 	<link rel="stylesheet" href="assets/css/bootstrap-grid.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 	<link rel="stylesheet" href="assets/css/style.css">
 
 	<style id="anii-inline-style">
+        html {
+            scroll-behavior: smooth; /* still use JS for exact offset handling */
+        }
+        /* Active menu link */
+        #site-menu a.active {
+            color: #ffbd14;
+        }
 		.sales-box {
 			background-image: url(tmp/sample-sales-background.jpg);
 		}
+        .question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 20px 80px 20px 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .question::after {
+            content: "\002B";
+            font-size: 2.2rem;
+            position: absolute;
+            right: 20px;
+            transition: 0.2s;
+        }
+
+        .question.active::after {
+            transform: rotate(45deg);
+        }
+
+        .answercont {
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .answer {
+            padding: 0 20px 20px;
+            line-height: 1.5rem;
+        }
+
+        .question.active + .answercont {
+        }
+
+        .home .cs-section {
+            padding-bottom: 2rem
+        }
+
+        @media (min-width: 768px) {
+            .home .cs-section {
+                padding-bottom:3rem
+            }
+        }
+
+        @media (min-width: 992px) {
+            .home .cs-section {
+                padding-bottom:4rem
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .home .cs-section {
+                padding-bottom:5rem
+            }
+        }
+
+        .home .cs-section h2 {
+            margin-top: 1rem;
+            margin-bottom: 1rem
+        }
+
+        @media screen and (max-width: 790px){
+            html {
+                font-size: 14px;
+            }
+            .wrapper {
+                width: 80%;
+            }
+        }
+
+
+        /*testimonial*/
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-borders span {
+            height: 5px;
+            background: #f17a24;
+            width: 40px;
+            display: inline-block;
+            border-radius: 2px;
+        }
+
+        .section-borders span.black-border {
+            background: #333;
+            width: 30px;
+            margin: 0 6px;
+
+        }
+
+        .client-testimonial-carousel .owl-dots button {
+            height: 5px;
+            background: #f17a24 !important;
+            width: 20px;
+            display: inline-block;
+            margin: 5px;
+            transition: .2s;
+            border-radius: 2px;
+        }
+
+        .client-testimonial-carousel button.owl-dot.active {
+            background: #FFFFFF !important;
+            width: 30px;
+        }
+
+        .client-testimonial-carousel .owl-dots {
+            text-align: center;
+            margin-top: 25px
+        }
+
+        .single-testimonial-item {
+            position: relative;
+            box-shadow: 0 0 2px #dadfd3;
+            margin: 2px;
+            padding: 20px;
+            font-style: italic;
+            padding-left: 85px;
+        }
+
+        .single-testimonial-item:before {
+            font-family: "Font Awesome 5 Free";
+            content: "\f10e";
+            font-weight: 900;
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            font-size: 20px;
+            color: #f17a24;
+            line-height: 30px;
+            margin-top: -15px;
+        }
+
+        .single-testimonial-item:after {
+            background: #ddd;
+            content: "";
+            height: 70%;
+            left: 60px;
+            position: absolute;
+            top: 10%;
+            width: 1px;
+        }
+
+        .single-testimonial-item h3 {
+            font-size: 20px;
+            font-style: normal;
+            margin-bottom: 0;
+        }
+
+        .single-testimonial-item h3 span {
+            display: block;
+            font-size: 12px;
+            font-weight: normal;
+            margin-top: 5px;
+        }
 	</style>
 </head>
 <body class="home footer-sticky">
@@ -30,48 +202,20 @@
 			<div class="container">
 				<div class="row align-items-center">
 					<div class="site-title col col-lg-auto order-first">
-						<h1><a href="index.html" class="custom-logo-link" rel="home"><img src="tmp/logo.svg" class="custom-logo" width="98" height="30" alt="Anii"></a></h1>
+						<h1><a href="index.html" class="custom-logo-link" rel="home"><img src="tmp/logo.svg" class="custom-logo" width="250" height="30" alt="Anii"></a></h1>
 					</div>
-					<nav id="site-menu" class="col-12 col-lg order-3 order-sm-4 order-lg-2">
-						<ul>
-							<li class="menu-item menu-item-has-children current-menu-parent">
-								<a href="index.html">Home</a>
-								<a href="#" class="menu-expand"></a>
-								<ul class="sub-menu">
-									<li class="menu-item current-menu-item"><a href="index.html">Home</a></li>
-									<li class="menu-item"><a href="index-alt.html">Home - Alt</a></li>
-								</ul>
-							</li>
-							<li class="menu-item menu-item-has-children">
-								<a href="episodes.html">Episodes</a>
-								<a href="#" class="menu-expand"></a>
-								<ul class="sub-menu">
-									<li class="menu-item"><a href="episodes.html">Browse Episodes</a></li>
-									<li class="menu-item"><a href="single-episode.html">Single Episode</a></li>
-								</ul>
-							</li>
-							<li class="menu-item menu-item-has-children"><a href="styleguide.html">Features</a>
-								<a href="#" class="menu-expand"></a>
-								<ul class="sub-menu">
-									<li class="menu-item"><a href="about.html">About</a></li>
-									<li class="menu-item menu-item-has-children">
-										<a href="blog.html">Blog</a>
-										<a href="#" class="menu-expand"></a>
-										<ul class="sub-menu">
-											<li class="menu-item"><a href="blog.html">Browse Posts</a></li>
-											<li class="menu-item"><a href="single-post.html">Single Post</a></li>
-										</ul>
-									</li>
-									<li class="menu-item"><a href="styleguide.html">Styleguide</a></li>
-									<li class="menu-item"><a href="404.html">404 - Not found</a></li>
-								</ul>
-							</li>
-							<li class="menu-item"><a href="contact.html">Contact</a></li>
-						</ul>
-					</nav>
-					<div class="call-to-action col-12 col-lg-auto order-5 order-xl-4">
-						<a href="#" class="button button-small button-color button-filled" target="_blank"><span class="mdi mdi-rss"></span> Subscribe</a>
-						<a href="#" class="button button-small button-color button-filled" target="_blank"><span class="mdi mdi-paypal"></span> Donate</a>
+                    <nav id="site-menu" class="col-12 col-lg order-3 order-sm-4 order-lg-2">
+                        <ul>
+                            <li class="menu-item"><a href="#featured" data-scroll>Home</a></li>
+                            <li class="menu-item"><a href="#latest-tab-container" data-scroll>Samples</a></li>
+                            <li class="menu-item"><a href="#how-it-works" data-scroll>How It Works</a></li>
+                            <li class="menu-item"><a href="#faqs" data-scroll>Faqs</a></li>
+                            <li class="menu-item"><a href="#reviews" data-scroll>Reviews</a></li>
+                        </ul>
+                    </nav>
+
+                    <div class="call-to-action col-12 col-lg-auto order-5 order-xl-4">
+						<a href="#" class="button button-small button-color button-filled" target="_blank"><span class="mdi mdi-rss"></span>CREATE</a>
 					</div>
 					<div class="site-menu-toggle col-auto order-2 order-sm-3">
 						<a href="#site-menu">
@@ -81,35 +225,49 @@
 				</div>
 			</div>
 		</div>
-		<div id="featured" class="featured-content">
-			<div class="container">
-				<div class="row">
-					<div class="col-12 col-lg-7 col-xl-6">
-						<h6 class="subtitle">Latest episode</h6>
-						<h2><a href="single-episode.html">Dreams of an artist and unique ideas scattered through a deserted mind</a></h2>
-						<p>This is not meant to be pleasant or polite. It is supposed to be true and unique. Yes, that's what I try every day... to be unique.</p>
-						<div id="latest-episode-player" class="podcast-episode-player" data-episode-download="https://html.liviucerchez.com/common/preview1.mp3" data-episode-download-button="Download Episode (831.6 KB)" data-episode-transcript="#" data-episode-transcript-button="View Transcript" data-episode-duration="00:41" data-episode-size="831.6 KB">
-							<audio class="wp-audio-shortcode" preload="none">
-								<source src="https://html.liviucerchez.com/common/preview1.mp3" type="audio/mpeg" />
-								<source src="https://html.liviucerchez.com/common/preview1.ogg" type="audio/ogg" />
-							</audio>
-						</div>
-						<p><a href="about.html" class="line-link">More details</a></p>
-					</div>
-				</div>
-			</div>
-			<div class="social-navigation">
-				<a title="Facebook Profile" target="_blank" href="https://facebook.com/"><span class="screen-reader-text">Facebook Profile</span></a>
-				<a title="Google Play" target="_blank" href="https://play.google.com/"><span class="screen-reader-text">Google Play</span></a>
-				<a title="YouTube Channel" target="_blank" href="https://youtube.com/"><span class="screen-reader-text">YouTube Channel</span></a>
-				<a title="Spotify Mixtape" target="_blank" href="https://spotify.com/"><span class="screen-reader-text">Spotify Mixtape</span></a>
-				<a title="Donate via PayPal" target="_blank" href="https://paypal.me/"><span class="screen-reader-text">Donate via PayPal</span></a>
-			</div>
-			<div id="featured-media" class="featured-media">
-				<img src="tmp/sample-header1.jpg" alt="">
-			</div>
-		</div>
-	</header>
+        <div id="featured" class="featured-content py-5">
+            <div class="container">
+                <div class="row align-items-center">
+
+                    <!-- Text Content -->
+                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                        <h6 class="subtitle">Book Your Next Kahani & Audio</h6>
+                        <h2 class="mb-3">Say goodbye to ElevenLabs. Meet BookMyKahani — the voice of India.</h2>
+                        <p class="mb-4">
+                            Fast samples • Real human tone • Hindi-first. Create stories, podcasts, audiobooks, and voiceovers — simple & quick.
+                            No setup. No tools. Just upload text — get real Indian audio instantly.
+                        </p>
+
+                        <!-- Podcast Player -->
+                        <div id="latest-episode-player" class="podcast-episode-player mb-3" data-episode-duration="00:41">
+                            <audio class="wp-audio-shortcode w-100" controls preload="none">
+                                <source src="https://html.liviucerchez.com/common/preview1.mp3" type="audio/mpeg" />
+                                Your browser does not support the audio element.
+                            </audio>
+
+                        </div>
+                        <div class="banner-btn mt-4">
+                            <a href="#" class="me-2 mb-1"><img src="https://d33wubrfki0l68.cloudfront.net/b54ad92b45d7e37c4baf02a321e53e6cc67e6df3/b5087/assets/images/podcast-apple.svg" alt="title"></a>
+                            <a href="#"><img src="https://d33wubrfki0l68.cloudfront.net/7fa535e3d06ef440a97f433f4846aa35adb453ef/a906a/assets/images/podcast-sound.svg" alt="title"></a>
+                        </div>
+                    </div>
+
+                    <!-- Image Content -->
+                    <div class="col-12 col-lg-6 text-center">
+                        <img
+                                src="https://d33wubrfki0l68.cloudfront.net/3c7b81e5321503351022f3a09d75180d879a49d3/e656b/assets/images/hero-image.png"
+                                alt="BookMyKahani Hero Image"
+                                class="img-fluid"
+                        >
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </header>
 
 	<main id="content">
 		<div id="intro-description">
@@ -117,27 +275,27 @@
 				<div class="row">
 					<div class="col-12">
 						<h6 class="subtitle">Want to know more?</h6>
-						<h2>Anii HTML Template</h2>
+						<h2>BookMyKahani Feature</h2>
 					</div>
 					<div class="col-12 col-lg-4 feature-box">
 						<span class="mdi mdi-responsive"></span>
-						<h5 class="feature-box-title">Fully Responsive</h5>
-						<p>Was were all texts that allow this such admittance, seemed how or sisters privilege away, is with my she of is the have the couldn't odd food.</p>
+						<h5 class="feature-box-title">Fill Real human sound</h5>
+						<p>At BookMyKahani, we bring your stories, scripts, and ideas to life with fill real human-like voices that sound natural and full of emotion. Whether you're creating a video, podcast, or ad – our voices make every word feel alive and heartfelt.</p>
 					</div>
 					<div class="col-12 col-lg-4 feature-box">
 						<span class="mdi mdi-palette"></span>
-						<h5 class="feature-box-title">Unique Look &amp; Feel</h5>
-						<p>For possible is brief. Privilege the concepts arrange last of are, state what of return good odd him, far every trial without responded dreams.</p>
+						<h5 class="feature-box-title">100% copyright-free</h5>
+						<p>All our audios are 100% copyright-free, so you can use them anytime, anywhere, without worrying about restrictions or claims. Perfect for YouTube, reels, presentations, or personal projects — it’s all yours to enjoy freely.</p>
 					</div>
 					<div class="col-12 col-lg-4 feature-box">
 						<span class="mdi mdi-heart"></span>
-						<h5 class="feature-box-title">Dedicated Support</h5>
-						<p>Tones, all stupid. Heard of well it quite were their tricoloured seven italic uninspired, model taking as, lay harder of the we the achievements their.</p>
+						<h5 class="feature-box-title">~90% accurate</h5>
+						<p>Plus, with ~90% accuracy, you’ll be amazed at how closely our AI voices match real human speech — smooth, expressive, and authentic.</p>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div id="latest-tab-container">
+		<div class="cs-section" id="latest-tab-container">
 			<div class="container">
 				<div class="row">
 					<div class="col-12">
@@ -240,9 +398,6 @@
 											</div>
 										</div>
 									</article>
-									<div class="pagination pagination-load-more">
-										<a href="episodes.html" class="button"><span class="mdi mdi-dots-horizontal"></span> Browse More <span class="d-none d-md-inline-block">Episodes</span></a>
-									</div>
 								</div>
 							</div>
 							<div id="tab-news" class="tab-content">
@@ -413,67 +568,224 @@
 				</div>
 			</div>
 		</div>
+        <div class="container cs-section" id="how-it-works">
+            <div class="row">
+                <div class="col-12">
+                    <h6 class="subtitle">How It Works</h6>
+                    <h2>Just 3 Easy Steps!</h2>
+                </div>
+                <div class="col-12 col-md-8 col-lg-9">
+                    <article class="entry entry-post episode-type-audio type-episode">
+                        <div class="entry-content">
+                            <p>
+                                <a class="jump-point button button-filled button-color button-small">
+                                    STEP: 1
+                                </a>
+                                <strong class="line-link">1. Share Your Story</strong>
+                            </p>
+                            <p>Send your story or script directly to us on WhatsApp or Telegram — simple, fast, and personal.</p>
+
+                        </div>
+                        <div class="entry-content">
+                            <p>
+                                <a class="jump-point button button-filled button-color button-small">
+                                    STEP: 2
+                                </a>
+                                <strong class="line-link">2. Connect With Our Team</strong>
+                            </p>
+                            <p>Our creative team will review your story, discuss voice style, emotion, and language preferences with you.</p>
+                        </div>
+                        <div class="entry-content">
+                            <p>
+                                <a class="jump-point button button-filled button-color button-small">
+                                    STEP: 3
+                                </a>
+                                <strong class="line-link">3. Receive Your Audio Story</strong>
+                            </p>
+                            <p>We’ll craft your story with real human-like voices, background music, and emotions — and deliver the final audio directly to you.</p>
+                         </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <div class=" container cs-section" id="faqs">
+            <div class="row align-items-center">
+                <div class="wrapper">
+                    <h1>FAQs</h1>
+                    <div class="container">
+                        <div class="question">
+                            What is BookMyKahani?
+                        </div>
+                        <div class="answercont">
+                            <div class="answer">
+                                BookMyKahani is an online platform where your stories, scripts, or messages are turned into real human-like voice audios. You can listen to free samples, choose your preferred voice, and get your own audio version made — all through WhatsApp or Telegram communication.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="question">
+                            Do you support multiple languages and voices?
+                        </div>
+                        <div class="answercont">
+                            <div class="answer">
+                                Yes! We support multiple Indian and international languages, including Hindi, English, Tamil, Telugu, Bengali, Marathi, and more.
+                                You can also choose from male, female, or kid voices — each one filled with real emotions and natural tone.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="question">
+                            Does the voice sound realistic?
+                        </div>
+                        <div class="answercont">
+                            <div class="answer">
+                                Absolutely! Our voices are powered by advanced AI that sounds almost like a real human speaker. Each word carries the right tone, emotion, and clarity — making it far better than other robotic tools you may have tried before.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="question">
+                            How can I get my audio?
+                        </div>
+                        <div class="answercont">
+                            <div class="answer">
+                                It’s super easy!
+                                Just contact us through WhatsApp or Telegram, send us your story or script, and our team will create the voice audio for you. You’ll receive your sample and final audio directly in your chat — no complicated setup needed!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="question">
+                            Is it free or paid?
+                        </div>
+                        <div class="answercont">
+                            <div class="answer">
+                                You can listen to free sample voices anytime.
+                                When you want your own story or message converted, pricing depends on the length and style of your script. But don’t worry — it’s always affordable and transparent!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="question">
+                            Can I use these audios anywhere?
+                        </div>
+                        <div class="answercont">
+                            <div class="answer">
+                                Yes! All BookMyKahani audios are 100% copyright-free. You can use them for YouTube videos, reels, podcasts, business promotions, or personal projects without any issue.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="question">
+                        How can I contact BookMyKahani?
+                    </div>
+                    <div class="answercont">
+                        <div class="answer">
+                            You can easily reach us through WhatsApp, Telegram, or our contact form on the website. Our team is friendly, quick to respond, and ready to bring your story to life with the perfect voice!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section-padding" id="reviews">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="section-title">
+                            <h2>Happy Clients</h2>
+
+                            <div class="section-borders">
+                                <span></span>
+                                <span class="black-border"></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="owl-carousel client-testimonial-carousel">
+                            <div class="single-testimonial-item">
+                                <p>“BookMyKahani turned my script into a beautiful emotional story. The voice felt real, expressive, and full of life — absolutely loved it!”</p>
+                                <h3>Aditi Sharma <span>YouTuber & Content Creator</span></h3>
+                            </div>
+                              <div class="single-testimonial-item">
+                                <p>“The human-like Hindi voice quality is next level! My audience now connects more deeply with every episode. Highly recommend their service.”</p>
+                                <h3>Rajesh Verma <span>Podcast Host</span></h3>
+                            </div>
+                              <div class="single-testimonial-item">
+                                <p>“I sent my story on WhatsApp, and within hours I received a perfect audio sample. The process was smooth and super friendly!”</p>
+                                <h3>Neha Patel <span>Story Writer</span></h3>
+                            </div>
+                              <div class="single-testimonial-item">
+                                <p>“BookMyKahani gave my ad campaign a local, emotional touch that AI tools couldn’t. It’s like a real person telling your story!”</p>
+                                <h3>Ankit Mehra <span>Digital Marketer</span></h3>
+                            </div>
+                            <div class="single-testimonial-item">
+                                <p>“The team understood my tone and emotion perfectly. Voices sound natural, accurate, and perfectly timed. Best platform for creative storytellers!”</p>
+                                <h3>Priya Nair <span>Educator & Voice Content User</span></h3>
+                            </div>
+
+                            <div class="single-testimonial-item">
+                                <p>“I love how easy it was — just shared my script on WhatsApp and got a perfect audio story. Super quick and impressive!”</p>
+                                <h3>Riya Malhotra <span>Instagram Influencer</span></h3>
+                            </div>
+
+                            <div class="single-testimonial-item">
+                                <p>“Compared to other tools, BookMyKahani sounds 100% human. My viewers often ask who the voice artist is — that’s how real it feels!”</p>
+                                <h3>Deepak Soni <span>YouTube Storyteller</span></h3>
+                            </div>
+
+                            <div class="single-testimonial-item">
+                                <p>“The team is super supportive and fast! I got exactly what I imagined — expressive, high-quality audio that perfectly matched my story’s mood.”</p>
+                                <h3>Arjun Desai <span>Creative Director</span></h3>
+                            </div>
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</main>
 
-	<footer class="sales-box">
-		<div class="container">
-			<div class="row align-items-center">
-				<div class="col-12 col-md-6">
-					<a href="#" class="cover-image">
-						<img src="tmp/sample-sales-cover.jpg" alt="">
-					</a>
-				</div>
-				<div class="col-12 col-md-6">
-					<h3>New Stuff Each Week!</h3>
-					<p>Listen below and order your copy from Amazon, iTunes or your favorite record store. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia conseqa untur magni dolores eos qui ratione sequi.</p>
-					<p><a href="#" class="button button-filled button-color button-small"><span class="mdi mdi-amazon"></span> Amazon</a> <a href="#" class="button button-filled button-color button-small"><span class="mdi mdi-apple"></span> iTunes</a> <a href="#" class="button button-filled button-color button-small"><span class="mdi mdi-spotify"></span> Spotify</a></p>
-				</div>
-			</div>
-		</div>
-	</footer>
+
 
 	<footer id="footer">
 		<div class="container">
 			<div class="row">
 				<div class="widget-area col-12">
 					<section class="widget widget_text">
-						<h3 class="widget-title">Don't miss our weekly episodes!</h3>
+						<h3 class="widget-title">Don’t Miss Our Story Magic</h3>
 						<div class="textwidget">
 							<form class="mc4wp-form" method="post">
 								<div class="mc4wp-form-fields">
-									<p>A theme with a simple and organized approach to presenting your content with understated charm and undeniable appeal.</p>
-									<p class="one-line">
-										<label class="screen-reader-text" for="subscribe_email">Subscription Email</label><input id="subscribe_email" name="email" required placeholder="Your email address&hellip;" type="email"><input value="Subscribe" type="submit">
-									</p>
+									 <p>“At BookMyKahani, we bring your words to life with real human-like voices, multi-language support, and emotions that connect with every heart.”</p>
 								</div>
 							</form>
 						</div>
 					</section>
-					<section class="widget widget_nav">
-						<h3 class="screen-reader-text">Social Navigation</h3>
-						<nav>
-							<ul class="social-navigation">
-								<li class="menu-item menu-item-type-custom">
-									<a title="Facebook Profile" target="_blank" href="https://facebook.com/"><span class="screen-reader-text">Facebook Profile</span></a>
-								</li>
-								<li class="menu-item menu-item-type-custom">
-									<a title="Google Play" target="_blank" href="https://play.google.com/"><span class="screen-reader-text">Google Play</span></a>
-								</li>
-								<li class="menu-item menu-item-type-custom">
-									<a title="YouTube Channel" target="_blank" href="https://youtube.com/"><span class="screen-reader-text">YouTube Channel</span></a>
-								</li>
-								<li class="menu-item menu-item-type-custom">
-									<a title="Spotify Mixtape" target="_blank" href="https://spotify.com/"><span class="screen-reader-text">Spotify Mixtape</span></a>
-								</li>
-								<li class="menu-item menu-item-type-custom">
-									<a title="Donate via PayPal" target="_blank" href="https://paypal.me/"><span class="screen-reader-text">Donate via PayPal</span></a>
-								</li>
-							</ul>
-						</nav>
-					</section>
 				</div>
 				<div class="copyright col-12">
-					<p>&copy; Anii's Podcast was created with &hearts; in Europe. All Rights Reserved. <span class="separator" role="separator" aria-hidden="true"></span> <a class="privacy-policy-link" href="#">Privacy Policy</a></p>
+					<p>&copy; BookMyKahani. All Rights Reserved.
+
+                    <p>
+                        <a class="privacy-policy-link" href="privacy-policy.html">Privacy Policy</a>
+                        <span class="separator" role="separator" aria-hidden="true"></span>
+                        <a class="privacy-policy-link" href="terms-conditions.html">Terms And Conditions</a>
+                        <span class="separator" role="separator" aria-hidden="true"></span>
+                        <a class="privacy-policy-link" href="gdpr-policy.html">GDPR policy</a>
+                    </p>
 				</div>
 			</div>
 		</div>
@@ -491,7 +803,182 @@
 	<script src="assets/mediaelement/mediaelement-migrate.js"></script>
 	<script src="assets/mediaelement/wp-mediaelement.js"></script>
 	<script src="assets/js/mediaelement-anii.js"></script>
-</body>
 
-<!-- Mirrored from html.liviucerchez.com/anii/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 30 Oct 2025 15:40:19 GMT -->
-</html>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $(".owl-carousel").owlCarousel({
+                items:3,
+//      autoplay:false,
+                margin:30,
+                loop:true,
+                dots:true
+//      nav:true,
+//      navText:["<i class='fas fa-long-arrow-alt-left'></i>","<i class='fas fa-long-arrow-alt-right'></i>" ]
+            });
+        });
+    </script>
+    <script>
+        let question = document.querySelectorAll(".question");
+
+        question.forEach(question => {
+            question.addEventListener("click", event => {
+                const active = document.querySelector(".question.active");
+                if(active && active !== question ) {
+                    active.classList.toggle("active");
+                    active.nextElementSibling.style.maxHeight = 0;
+                }
+                question.classList.toggle("active");
+                const answer = question.nextElementSibling;
+                if(question.classList.contains("active")){
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                } else {
+                    answer.style.maxHeight = 0;
+                }
+            })
+        })
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const header = document.querySelector('.navbar') || document.querySelector('header');
+            const nav = document.getElementById('site-menu');
+            const navLinks = document.querySelectorAll('#site-menu a[data-scroll]');
+            const menuToggle = document.querySelector('.site-menu-toggle a') || null;
+
+            // helper: current header height
+            function headerHeight() {
+                return header ? header.getBoundingClientRect().height : 0;
+            }
+
+            // Smooth scroll with offset
+            function scrollToHash(hash) {
+                const target = document.querySelector(hash);
+                if (!target) return;
+                const y = target.getBoundingClientRect().top + window.scrollY - headerHeight() - 12; // 12px padding
+                window.scrollTo({ top: Math.max(y, 0), behavior: 'smooth' });
+            }
+
+            // click handlers for menu items
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href && href.startsWith('#')) {
+                        e.preventDefault();
+                        // close mobile menu if open (basic)
+                        if (nav.classList.contains('expanded')) {
+                            nav.classList.remove('expanded');
+                            nav.classList.add('collapsed');
+                        }
+                        // scroll
+                        scrollToHash(href);
+                        // update URL hash without jumping
+                        history.replaceState(null, '', href);
+                    }
+                });
+            });
+
+            // Mobile toggle: basic show/hide nav (tweak for your CSS)
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    // toggle a class on nav to control visibility
+                    if (nav.classList.contains('expanded')) {
+                        nav.classList.remove('expanded');
+                        nav.classList.add('collapsed');
+                    } else {
+                        nav.classList.add('expanded');
+                        nav.classList.remove('collapsed');
+                    }
+                });
+            }
+
+            // IntersectionObserver to set active nav link
+            // Observe each major section that has an id referenced by nav links
+            const sections = Array.from(navLinks)
+                .map(l => l.getAttribute('href'))
+                .filter(Boolean)
+                .map(id => document.querySelector(id))
+                .filter(Boolean);
+
+            if ('IntersectionObserver' in window && sections.length) {
+                let headerH = headerHeight();
+                const ioOptions = {
+                    root: null,
+                    rootMargin: `-${headerH + 20}px 0px -40% 0px`, // top offset to account for header
+                    threshold: [0, 0.25, 0.6]
+                };
+
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        const id = '#' + (entry.target.id || '');
+                        const matchingLink = document.querySelector('#site-menu a[href="' + id + '"]');
+                        if (entry.isIntersecting) {
+                            navLinks.forEach(a => a.classList.remove('active'));
+                            if (matchingLink) matchingLink.classList.add('active');
+                        }
+                    });
+                }, ioOptions);
+
+                sections.forEach(s => observer.observe(s));
+
+                // update observer if header size changes (e.g. on resize)
+                window.addEventListener('resize', () => {
+                    headerH = headerHeight();
+                    observer.disconnect();
+                    const newOptions = {
+                        root: null,
+                        rootMargin: `-${headerH + 20}px 0px -40% 0px`,
+                        threshold: [0, 0.25, 0.6]
+                    };
+                    // recreate
+                    const newObserver = new IntersectionObserver(entries => {
+                        entries.forEach(entry => {
+                            const id = '#' + (entry.target.id || '');
+                            const matchingLink = document.querySelector('#site-menu a[href="' + id + '"]');
+                            if (entry.isIntersecting) {
+                                navLinks.forEach(a => a.classList.remove('active'));
+                                if (matchingLink) matchingLink.classList.add('active');
+                            }
+                        });
+                    }, newOptions);
+                    sections.forEach(s => newObserver.observe(s));
+                });
+            } else {
+                // fallback: on scroll, find nearest section
+                window.addEventListener('scroll', function () {
+                    const fromTop = window.scrollY + headerHeight() + 15;
+                    let current = null;
+                    sections.forEach(section => {
+                        if (section.offsetTop <= fromTop) current = section;
+                    });
+                    if (current) {
+                        const id = '#' + current.id;
+                        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+                    }
+                });
+            }
+
+            // If user lands with a hash, smoothly scroll to it on load
+            if (location.hash) {
+                // small timeout ensures layout & header height calculated
+                setTimeout(() => scrollToHash(location.hash), 50);
+            }
+        });
+    </script>
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/69106927edad88195eb788ea/1j9k1lhcm';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+</body>
+ </html>

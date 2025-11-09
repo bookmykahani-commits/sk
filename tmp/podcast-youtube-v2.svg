@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="120" viewBox="0 0 420 120" role="img" aria-label="Listen on YouTube">
+  <title>Listen on YouTube</title>
+  <defs>
+    <style><![CDATA[
+      .container { font-family: "Inter", "Helvetica Neue", Arial, sans-serif; }
+      .label { font-size:20px; font-weight:700; fill:#111111; }
+      .sub { font-size:18px; font-weight:600; fill:#111111; opacity:0.9; }
+      .badge-bg { fill: none; }
+      .yt-rect { fill: #FF0000; rx:16; ry:16; }
+      .yt-triangle { fill: #ffffff; }
+    ]]></style>
+  </defs>
+
+  <!-- Background (transparent) -->
+  <rect class="badge-bg" x="0" y="0" width="100%" height="100%" />
+
+  <!-- Icon: larger YouTube rounded rectangle with play triangle -->
+  <g id="youtube" transform="translate(24,32)">
+    <rect class="yt-rect" x="0" y="0" width="96" height="56" rx="12" ry="12"/>
+    <!-- play triangle centered inside rect -->
+    <path class="yt-triangle" d="M40 18 L64 28 L40 38 Z" />
+  </g>
+
+  <!-- Text stack, vertically centered relative to icon -->
+  <g transform="translate(140,40)" class="container">
+    <text class="label" x="0" y="0">Listen On</text>
+    <text class="sub" x="0" y="30">YouTube Channel</text>
+  </g>
+
+  <!-- Optional subtle divider line to the far right for balance -->
+  <line x1="400" y1="16" x2="400" y2="104" stroke="#000000" stroke-opacity="0.03" stroke-width="2"/>
+
+</svg>
