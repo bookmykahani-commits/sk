@@ -738,8 +738,11 @@ a.close-chat {
 .pod-btn__title{
     font-size: 15px;
     font-weight: 700;
-    color: var(--text);
+    color: #222;
     white-space: nowrap;
+}
+.pod-btn:hover {
+    text-decoration: none;
 }
 
 /* optional right spacing or small drop-shadow like original */
@@ -860,7 +863,7 @@ a.close-chat {
 
 .cta-telegram {
     background: transparent;
-    color: var(--text);
+    color: #222;
     border: 1px solid rgba(255,255,255,0.06);
 }
 .cta-telegram:hover { background: rgba(255,255,255,0.02); transform: translateY(-3px); }
