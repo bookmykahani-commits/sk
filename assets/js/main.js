@@ -152,24 +152,21 @@ $(".owl-carousel").owlCarousel({
 }
 });
 // widget
-/* Whatsapp Chat Widget by www.bloggermix.com */
 $(document).on("click", "#send-it", function() {
-    var a = document.getElementById("chat-input");
-    if ("" != a.value) {
-        var b = $("#get-number").text(),
+    const defaultMsg = "Hello! I want to book my Kahani 🎙️";        // your default
+    var b = $("#get-number").text(),
             c = document.getElementById("chat-input").value,
-            d = "https://web.whatsapp.com/send",
+            d = "https://wa.me/",
             e = b,
-            f = "&text=" + c;
+            f = "?text=" + (c == '' ? defaultMsg : c);
         if (
             /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
                 navigator.userAgent
             )
         )
             var d = "whatsapp://send";
-        var g = d + "?phone=+31 6 29320129" + e + f;
+        var g = d + "+918758141053" + e + f;
         window.open(g, "_blank");
-    }
 }),
     $(document).on("click", ".informasi", function() {
         (document.getElementById("get-number").innerHTML = $(this)
