@@ -1,11 +1,42 @@
 
 $(document).ready(function(){
 $(".owl-carousel").owlCarousel({
-    items:3,
-//      autoplay:false,
-    margin:30,
-    loop:true,
-    dots:true
+    loop: true,
+    margin: 12,
+    autoplay: true,
+    autoplayTimeout: 5200,
+    autoplayHoverPause: true,
+    smartSpeed: 700,
+    nav: false,
+    dots: true,
+    center: false,
+    // important: default stagePadding removed, we set per-breakpoint below
+    responsive:{
+        0:{
+            items:1,
+            stagePadding: 0     // <--- no side padding on mobile
+        },
+        576:{
+            items:1,
+            stagePadding: 0
+        },
+        768:{
+            items:2,
+            stagePadding: 10
+        },
+        992:{
+            items:3,
+            stagePadding: 20
+        }
+    }
+});
+$('.client-testimonial-carousel').on('initialized.owl.carousel changed.owl.carousel refreshed.owl.carousel', function(e){
+    var $dots = $(this).closest('.client-testimonial-carousel').find('.owl-dots button.owl-dot');
+    $dots.each(function(i){
+        $(this).attr('aria-label', 'View testimonials page ' + (i+1));
+    });
+    $('.owl-dots button.owl-dot').removeAttr('aria-current');
+    $('.owl-dots button.owl-dot.active').attr('aria-current', 'true');
 });
 });
     let question = document.querySelectorAll(".question");

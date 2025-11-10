@@ -174,99 +174,181 @@ html {
     }
 }
 
+/* Base */
+.section-padding { padding: 72px 0; }
+.section-title { text-align:center; margin-bottom: 44px; }
+.section-title h2 { font-size: clamp(20px, 4.2vw, 30px); margin:0; letter-spacing:-0.01em; }
 
-/*testimonial*/
+/* decorative bars */
+.section-borders { display:inline-flex; align-items:center; gap:8px; margin-top:12px; }
+.section-borders span { height:6px; width:40px; background:#f17a24; border-radius:3px; display:inline-block; }
+.section-borders .black-border { background:#222; width:28px; margin:0 6px; }
 
-.section-padding {
-    padding: 80px 0;
-}
-
-.section-title {
-    text-align: center;
-    margin-bottom: 60px;
-}
-
-.section-borders span {
-    height: 5px;
-    background: #f17a24;
-    width: 40px;
-    display: inline-block;
-    border-radius: 2px;
-}
-
-.section-borders span.black-border {
-    background: #333;
-    width: 30px;
-    margin: 0 6px;
-
-}
-
+/* Owl dots */
+.client-testimonial-carousel .owl-dots { text-align:center; margin-top:20px; }
 .client-testimonial-carousel .owl-dots button {
-    height: 5px;
-    background: #f17a24 !important;
-    width: 20px;
-    display: inline-block;
-    margin: 5px;
-    transition: .2s;
-    border-radius: 2px;
+    height:8px; width:24px; display:inline-block; margin:6px 6px;
+    background:#f17a24; border-radius:6px; border:0; transition: all .18s ease;
+}
+.client-testimonial-carousel .owl-dots button span { display:block; height:100%; width:100%; border-radius:6px; }
+.client-testimonial-carousel .owl-dots button[aria-current="true"],
+.client-testimonial-carousel .owl-dots button.owl-dot.active {
+    background:#fff; width:36px; box-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
 
-.client-testimonial-carousel button.owl-dot.active {
-    background: #FFFFFF !important;
-    width: 30px;
-}
-
-.client-testimonial-carousel .owl-dots {
-    text-align: center;
-    margin-top: 25px
-}
-
-.single-testimonial-item {
-    position: relative;
-    box-shadow: 0 0 2px #dadfd3;
-    margin: 2px;
-    padding: 20px;
+/* Testimonial card */
+.single-testimonial-item{
+    position:relative;
+    background: #fff;
+    color:#111;
+    box-shadow: 0 6px 20px rgba(12,15,20,0.06);
+    border-radius: 12px;
+    margin: 10px;
+    padding: 24px 22px 22px 96px;   /* leave room for left icon area on large screens */
     font-style: italic;
-    padding-left: 85px;
+    min-height: 140px;
+    transition: transform .18s ease, box-shadow .18s ease;
 }
 
-.single-testimonial-item:before {
+/* subtle hover/focus */
+.single-testimonial-item:hover,
+.single-testimonial-item:focus {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(12,15,20,0.12);
+    outline: none;
+}
+
+/* left quote icon */
+.single-testimonial-item:before{
     font-family: "Font Awesome 5 Free";
     content: "\f10e";
     font-weight: 900;
     position: absolute;
-    left: 20px;
-    top: 50%;
-    font-size: 20px;
+    left: 28px;
+    top: 28px;
+    font-size: 22px;
     color: #f17a24;
-    line-height: 30px;
-    margin-top: -15px;
+    line-height: 1;
 }
 
-.single-testimonial-item:after {
-    background: #ddd;
+/* vertical separator */
+.single-testimonial-item:after{
     content: "";
-    height: 70%;
-    left: 60px;
     position: absolute;
-    top: 10%;
-    width: 1px;
+    left: 74px;
+    top: 18%;
+    height: 64%;
+    width: 2px;
+    background: #eee;
+    border-radius: 2px;
 }
 
-.single-testimonial-item h3 {
-    font-size: 20px;
+/* name/title */
+.single-testimonial-item h3{
+    font-size: 16px;
     font-style: normal;
+    margin-top: 14px;
     margin-bottom: 0;
+    font-weight:700;
+}
+.single-testimonial-item h3 span{
+    display:block;
+    font-size: 13px;
+    font-weight:500;
+    color:#666;
+    margin-top:6px;
 }
 
-.single-testimonial-item h3 span {
-    display: block;
-    font-size: 12px;
-    font-weight: normal;
-    margin-top: 5px;
+/* quote text */
+.single-testimonial-item p{
+    margin:0;
+    font-size: 15px;
+    line-height: 1.6;
+    color:#222;
 }
 
+/* carousel item spacing fix */
+.client-testimonial-carousel .owl-stage-outer { padding: 6px 18px; }
 
+/* Responsive adjustments */
+/* Medium devices: reduce left padding and icon size */
+@media (max-width: 991.98px) {
+    .single-testimonial-item{ padding: 20px 18px 18px 82px; min-height: 130px; }
+    .single-testimonial-item:before{ left: 22px; top: 22px; font-size: 20px; }
+    .single-testimonial-item:after{ left: 66px; }
+}
+
+/* Small & Mobile: stack content, remove left gutter, increase readability */
+@media (max-width: 575.98px) {
+    .section-padding { padding: 42px 12px; }
+    .section-title { margin-bottom: 28px; }
+    .single-testimonial-item {
+        padding: 18px 14px;
+        font-style: normal;            /* easier to read on small screens */
+        border-radius: 10px;
+        margin: 10px 6px;
+        min-height: auto;
+    }
+    .single-testimonial-item:before { position: relative; left: auto; top: auto; display:inline-block; margin-right:10px; font-size:18px; vertical-align: middle; }
+    .single-testimonial-item:after { display:none; } /* remove separator */
+    .single-testimonial-item p { font-size: 16px; line-height:1.65; }
+    .single-testimonial-item h3 { margin-top:12px; font-size:15px; }
+    .client-testimonial-carousel .owl-dots { margin-top: 16px; }
+}
+
+/* Accessibility: focus visible state for keyboard users */
+.single-testimonial-item:focus { box-shadow: 0 20px 44px rgba(12,15,20,0.14); border: 3px solid rgba(241,122,36,0.08); }
+.client-testimonial-carousel .owl-item {
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+.client-testimonial-carousel .single-testimonial-item {
+    width: 100% !important;
+    max-width: 760px;             /* adjust as you like */
+    box-sizing: border-box;
+    padding-left: 24px;           /* reduced desktop gutter baseline */
+    padding-right: 22px;
+}
+/* Remove/convert left icon gutter on small screens (icon in-flow) */
+@media (max-width: 575.98px) {
+    /* remove owl stage padding if still present */
+    .client-testimonial-carousel .owl-stage-outer { padding-left: 0 !important; padding-right: 0 !important; }
+
+    /* card becomes full width, smaller internal paddings */
+    .client-testimonial-carousel .single-testimonial-item {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+        margin: 10px 6px;
+        font-style: normal; /* improves readability on small screens */
+        border-radius: 10px;
+    }
+
+    /* put the quote icon inline to avoid a big left gutter */
+    .client-testimonial-carousel .single-testimonial-item:before{
+        position: relative;
+        left: 0;
+        top: 0;
+        display: inline-block;
+        margin-right: 10px;
+        font-size: 18px;
+        vertical-align: middle;
+    }
+    .client-testimonial-carousel .single-testimonial-item:after { display:none; }
+
+    /* Dot sizing for phones */
+    .client-testimonial-carousel .owl-dots button {
+        height: 8px; width: 24px; margin: 8px 6px;
+        border-radius: 6px;
+    }
+    .client-testimonial-carousel .owl-dots button.owl-dot.active {
+        width: 32px;
+    }
+}
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    .single-testimonial-item, .single-testimonial-item:hover, .single-testimonial-item:focus { transition: none; transform: none; }
+}
 
 /*widget*/
 /* CSS Multiple Whatsapp Chat */
