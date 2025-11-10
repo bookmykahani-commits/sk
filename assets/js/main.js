@@ -164,7 +164,6 @@ $(document).on("click", "#send-it", function() {
                 navigator.userAgent
             )
         )
-            var d = "whatsapp://send";
         var g = d + "+918758141053" + e + f;
         window.open(g, "_blank");
 }),
