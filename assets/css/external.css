@@ -873,8 +873,9 @@ a.close-chat {
 
 .step-head { display:flex; align-items:center; gap:14px; margin-bottom:8px; }
 .step-badge {
-    background: linear-gradient(90deg, var(--primary), #ff9b4a);
-    color:#111;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--primary-alt-color);
     padding:8px 12px;
     border-radius: 999px;
     font-weight:700;
@@ -1029,16 +1030,6 @@ a.close-chat {
     color: #222;
 }
 
-/* fade gradient at bottom to hint more content */
-.entry-content__summary::after{
-    content: "";
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 40%;
-    background: linear-gradient(to bottom, rgba(255,255,255,0), #fff 85%);
-    pointer-events: none;
-    display: block;
-}
 
 /* Read more button */
 .readmore-btn {
@@ -1048,7 +1039,7 @@ a.close-chat {
     color: var(--accent, #f17a24);
     font-weight: 700;
     cursor: pointer;
-    padding: 6px 0;
+    padding: 6px;
     font-size: 14px;
     display: inline-block;
 }
@@ -1072,3 +1063,59 @@ a.close-chat {
     .episode-card .entry-title { font-size: 16px; }
     .episode-card .entry-meta { font-size: 12px; }
 }
+
+/*collabs*/
+/* Read-more styles for episode cards */
+.entry-content {
+    position: relative;
+    overflow: visible;
+}
+
+/* summary wrapper: controlled height */
+.entry-content__summary {
+    overflow: hidden;
+    transition: max-height .36s ease, opacity .2s ease;
+    will-change: max-height;
+    position: relative;
+}
+
+
+/* when expanded remove fade */
+.entry-content__summary.expanded::after {
+    opacity: 0;
+    height: 0;
+}
+
+
+/* make button keyboard-friendly focus outline */
+.readmore-btn:focus {
+    outline: 3px solid rgba(241,122,36,0.12);
+    outline-offset: 4px;
+    border-radius: 6px;
+}
+
+/* default collapsed heights (will be overridden by JS for precision) */
+.entry-content__summary[data-collapsed-lines="4"] { max-height: calc(1.5em * 4); }
+.entry-content__summary[data-collapsed-lines="5"] { max-height: calc(1.5em * 5); }
+
+/* small screen: default shorter preview */
+@media (max-width: 575.98px) {
+    .entry-content__summary { --collapsed-lines: 4; }
+}
+
+/* larger screens: show more lines */
+@media (min-width: 576px) {
+    .entry-content__summary { --collapsed-lines: 6; }
+}
+
+/* when expanded allow full height */
+.entry-content__summary.expanded {
+    max-height: 2000px; /* big enough to reveal full text; JS will set precise height too */
+}
+
+/* Optional: small animation for button arrow */
+.readmore-btn .chev { display:inline-block; margin-left:6px; transition: transform .2s ease; }
+.readmore-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
+
+/* Keep paragraphs readable */
+.entry-content__summary p { margin: 0 0 0.75em 0; color: #FFFFFF; font-size: 15px; line-height: 1.6; }

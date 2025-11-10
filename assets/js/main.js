@@ -317,3 +317,130 @@ $(document).on("click", "#send-it", function() {
         });
     });
 })();
+
+
+
+// collabs
+(function(){
+    // Configuration: lines to show collapsed on small and large screens
+    var COLLAPSED_LINES_MOBILE = 2;
+    var COLLAPSED_LINES_DESKTOP = 3;
+    var MOBILE_BREAKPOINT = 576; // px
+
+    function getCollapsedLines() {
+        return (window.innerWidth < MOBILE_BREAKPOINT) ? COLLAPSED_LINES_MOBILE : COLLAPSED_LINES_DESKTOP;
+    }
+
+    function px(value){ return Math.round(value) + 'px'; }
+
+    function initReadMore() {
+        // find all episode cards and ensure wrapper exists
+        var cards = document.querySelectorAll('.episode-card');
+        cards.forEach(function(card){
+            var content = card.querySelector('.entry-content');
+            if(!content) return;
+
+            // look for existing summary wrapper; if not, wrap direct children
+            var summary = content.querySelector('.entry-content__summary');
+            if(!summary) {
+                // create wrapper and move child nodes into it until a .readmore-btn exists or end
+                summary = document.createElement('div');
+                summary.className = 'entry-content__summary';
+                // move all children except existing .readmore-btn (if any)
+                while (content.firstChild) {
+                    // keep buttons out if already present
+                    if (content.firstChild.classList && content.firstChild.classList.contains('readmore-btn')) break;
+                    summary.appendChild(content.firstChild);
+                }
+                content.insertBefore(summary, content.firstChild);
+            }
+
+            // create or reuse button
+            var btn = content.querySelector('.readmore-btn');
+            if(!btn) {
+                btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'readmore-btn button button-small button-color button-filled';
+                btn.setAttribute('aria-expanded', 'false');
+                btn.innerHTML = 'Read more <span class="chev">▾</span>';
+                content.appendChild(btn);
+            }
+
+            // measure whether text overflows collapsed height
+            function update() {
+                // reset any forced styles for measurement
+                summary.classList.remove('expanded');
+                summary.style.maxHeight = null;
+
+                // Compute line-height of first child paragraph or summary
+                var firstChild = summary.querySelector('p') || summary.firstElementChild;
+                var cs = window.getComputedStyle(firstChild || summary);
+                var lineHeight = parseFloat(cs.lineHeight);
+                if (isNaN(lineHeight)) {
+                    // fallback to font-size * 1.4
+                    var fs = parseFloat(cs.fontSize) || 15;
+                    lineHeight = fs * 1.6;
+                }
+
+                var collapsedLines = getCollapsedLines();
+                // store for CSS rule reference (optional)
+                summary.setAttribute('data-collapsed-lines', collapsedLines);
+
+                var collapsedHeight = Math.round(lineHeight * collapsedLines);
+                // actual content height
+                var fullHeight = summary.scrollHeight;
+
+                if (fullHeight > collapsedHeight + 4) {
+                    // content is long: apply collapsed height and show button
+                    summary.style.maxHeight = px(collapsedHeight);
+                    btn.style.display = 'inline-block';
+                    btn.setAttribute('aria-hidden', 'false');
+                    btn.setAttribute('data-collapsed-height', collapsedHeight);
+                    btn.setAttribute('data-full-height', fullHeight);
+                } else {
+                    // content small: no button, show full content
+                    summary.style.maxHeight = px(fullHeight);
+                    summary.classList.remove('expanded');
+                    btn.style.display = 'none';
+                    btn.setAttribute('aria-hidden', 'true');
+                }
+            }
+
+            // toggle on click
+            btn.addEventListener('click', function(){
+                var isExpanded = summary.classList.toggle('expanded');
+                if (isExpanded) {
+                    // expand to full height (use measured full height to animate nicely)
+                    var fullH = btn.getAttribute('data-full-height') || summary.scrollHeight;
+                    summary.style.maxHeight = px(fullH);
+                    btn.setAttribute('aria-expanded', 'true');
+                    btn.innerHTML = 'Show less <span class="chev">▾</span>';
+                } else {
+                    // collapse to collapsed height
+                    var collH = btn.getAttribute('data-collapsed-height') || (getCollapsedLines()*16*1.6);
+                    summary.style.maxHeight = px(collH);
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.innerHTML = 'Read more <span class="chev">▾</span>';
+                }
+            });
+
+            // re-run on window resize with debounce
+            var resizeTimeout;
+            function debounceUpdate(){
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(update, 120);
+            }
+            window.addEventListener('resize', debounceUpdate);
+
+            // initial measurement
+            update();
+        });
+    }
+
+    // init on DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initReadMore);
+    } else {
+        initReadMore();
+    }
+})();
