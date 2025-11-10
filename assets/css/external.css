@@ -218,30 +218,6 @@ html {
     outline: none;
 }
 
-/* left quote icon */
-.single-testimonial-item:before{
-    font-family: "Font Awesome 5 Free";
-    content: "\f10e";
-    font-weight: 900;
-    position: absolute;
-    left: 28px;
-    top: 28px;
-    font-size: 22px;
-    color: #f17a24;
-    line-height: 1;
-}
-
-/* vertical separator */
-.single-testimonial-item:after{
-    content: "";
-    position: absolute;
-    left: 74px;
-    top: 18%;
-    height: 64%;
-    width: 2px;
-    background: #eee;
-    border-radius: 2px;
-}
 
 /* name/title */
 .single-testimonial-item h3{
@@ -862,7 +838,7 @@ a.close-chat {
 #how-it-works .how-wrapper {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2.2rem 1rem;
+    padding: 2.2rem 0.5rem;
     box-sizing: border-box;
 }
 
