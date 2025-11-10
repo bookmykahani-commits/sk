@@ -964,3 +964,135 @@ a.close-chat {
     .step-badge { padding:6px 10px; font-size:.82rem; }
     .cta-block a { padding:10px; font-size:.95rem; }
 }
+
+/* Mobile-first adjustments for episode cards */
+.episode-card {
+    background: transparent;
+    margin-bottom: 18px;
+    border-radius: 12px;
+    overflow: hidden;
+    -webkit-font-smoothing:antialiased;
+}
+
+/* Make entry-media thumbnail responsive and smaller on mobile */
+.episode-card .entry-media {
+    width: 100%;
+    display: block;
+    padding: 0;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+/* Thumb image: keep aspect ratio, crop to look like poster */
+.episode-card .entry-media img {
+    width: 100%;
+    height: 220px;               /* card poster height for mobile */
+    object-fit: cover;           /* crop to cover without distortion */
+    display: block;
+    border-radius: 10px;
+}
+
+/* "new" ribbon scaled down and positioned top-left */
+.episode-card .entry-media .ribbon {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 14px;
+    background: var(--accent, #f17a24);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+/* Content column: flush, compact paddings */
+.episode-card .entry-header,
+.episode-card .entry-audio,
+.episode-card .entry-content {
+    padding: 0 6px;
+}
+
+/* Meta: make it concise and inline */
+.episode-card .entry-meta{
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    color: #9aa0a6;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+.episode-card .entry-meta a { color: inherit; text-decoration: none; }
+
+/* Title: larger, bold, readable */
+.episode-card .entry-title{
+    font-size: 18px;
+    line-height: 1.25;
+    margin: 0 0 8px;
+    font-weight: 700;
+}
+
+/* Audio player: full width and compact height */
+.episode-card .entry-audio .wp-audio-shortcode,
+.episode-card .entry-audio audio {
+    width: 100% !important;
+    height: 48px !important;
+    max-height: 56px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Description collapse/summary */
+.entry-content__summary {
+    max-height: 4.6em;   /* ~2.5 lines depending on font-size */
+    overflow: hidden;
+    position: relative;
+    transition: max-height .36s ease;
+    font-size: 15px;
+    color: #222;
+}
+
+/* fade gradient at bottom to hint more content */
+.entry-content__summary::after{
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 40%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), #fff 85%);
+    pointer-events: none;
+    display: block;
+}
+
+/* Read more button */
+.readmore-btn {
+    margin-top: 10px;
+    background: transparent;
+    border: 0;
+    color: var(--accent, #f17a24);
+    font-weight: 700;
+    cursor: pointer;
+    padding: 6px 0;
+    font-size: 14px;
+    display: inline-block;
+}
+
+/* when expanded remove gradient & allow full height */
+.entry-content__summary.expanded {
+    max-height: 1000px;
+}
+.entry-content__summary.expanded::after{ display:none; }
+
+/* For medium screens & up keep two-column layout but adjust image size */
+@media (min-width: 768px) {
+    .episode-card .entry-media img { height: 180px; }
+    .episode-card .entry-content__summary { max-height: none; }
+    .readmore-btn { display: none; } /* disable read more on larger screens */
+}
+
+/* Optional: reduce title size on very small phones */
+@media (max-width: 360px) {
+    .episode-card .entry-media img { height: 180px; }
+    .episode-card .entry-title { font-size: 16px; }
+    .episode-card .entry-meta { font-size: 12px; }
+}

@@ -22,16 +22,4 @@
     <!-- Main text -->
     <text x="8" y="40" class="logo-text">Bookmykahani</text>
 
-    <!-- Right-side animated arcs (sound/wave motif) -->
-    <g transform="translate(300,20)" aria-hidden="true">
-        <path class="accent" d="M18 6c0-3.3-2.7-6-6-6">
-            <animate attributeName="opacity" values="1;0;1" dur="2.4s" repeatCount="indefinite" />
-        </path>
-        <path class="accent" d="M24 12c0-6.6-5.4-12-12-12">
-            <animate attributeName="opacity" values="1;0;0;1" dur="2.8s" repeatCount="indefinite" />
-        </path>
-        <circle cx="4" cy="8" r="2.6" fill="currentColor">
-            <animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite" />
-        </circle>
-    </g>
 </svg>
