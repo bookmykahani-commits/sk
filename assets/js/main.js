@@ -272,3 +272,18 @@ $(document).on("click", "#send-it", function() {
         });
     });
 })();
+
+// how work
+(function(){
+    // Small enhancement: allow clicking step to expand/collapse details (mobile-friendly)
+    // Each .step-card toggles the 'expanded' class (purely presentational)
+    const steps = document.querySelectorAll('#how-it-works .step-card');
+    steps.forEach(card => {
+        // add toggle area on small screens
+        card.addEventListener('click', (e) => {
+            // don't toggle when a link inside was clicked
+            if (e.target.tagName.toLowerCase() === 'a' || e.target.closest('a')) return;
+            card.classList.toggle('expanded');
+        });
+    });
+})();
