@@ -7,45 +7,139 @@ html {
 }
 .sales-box {
     background-image: url(tmp/sample-sales-background.jpg);
+} /* Basic layout */
+.faqs-section {
+    width: 100%;
+    padding: 3rem 1rem;
+    box-sizing: border-box;
+    background: transparent;
 }
-.question {
-    font-size: 1.2rem;
+
+.faqs-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.faqs-title {
+    font-size: 2rem;
+    margin: 0 0 1rem;
+    text-align: left;
+}
+
+/* Grid: two columns on wider screens, single column on small screens */
+.faq-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+/* FAQ item */
+.faq-item {
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    overflow: hidden;
+    transition: transform 0.16s ease;
+}
+
+.faq-item:focus-within {
+    transform: translateY(-3px);
+}
+
+/* Question button */
+.faq-question {
+    width: 100%;
+    text-align: left;
+    padding: 18px 20px;
+    font-size: 1.05rem;
     font-weight: 600;
-    padding: 20px 80px 20px 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
     position: relative;
     display: flex;
     align-items: center;
-    cursor: pointer;
+    gap: 12px;
+    box-sizing: border-box;
 }
 
-.question::after {
+.faq-question:focus {
+    outline: 3px solid rgba(66,153,225,0.25);
+    outline-offset: 2px;
+    border-radius: 8px;
+}
+
+/* plus icon using ::after */
+.faq-question::after {
     content: "\002B";
-    font-size: 2.2rem;
-    position: absolute;
-    right: 20px;
-    transition: 0.2s;
+    font-size: 1.8rem;
+    margin-left: auto;
+    transition: transform 0.2s ease;
+    line-height: 1;
 }
 
-.question.active::after {
+.faq-question[aria-expanded="true"]::after {
     transform: rotate(45deg);
 }
 
-.answercont {
+/* Answer panel (collapsed by default) */
+.faq-answer {
     max-height: 0;
     overflow: hidden;
-    transition: 0.3s;
+    padding: 0 20px;
+    transition: max-height 0.34s ease, padding 0.2s ease;
 }
 
-.answer {
-    padding: 0 20px 20px;
-    line-height: 1.5rem;
+/* When open we set padding-bottom for spacing; JS sets max-height inline for smooth transition */
+.faq-answer.open {
+    padding-bottom: 20px;
 }
 
-.question.active + .answercont {
+.faq-answer p {
+    margin: 12px 0 0;
+    line-height: 1.6;
+    font-size: 0.985rem;
 }
 
-.home .cs-section {
-    padding-bottom: 2rem
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .faq-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+    }
+
+    .faqs-title {
+        font-size: 2.25rem;
+    }
+
+    .faq-question {
+        padding: 22px 24px;
+        font-size: 1.12rem;
+    }
+
+    .faq-answer {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+}
+
+@media (min-width: 1100px) {
+    .faqs-inner {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .faq-item {
+        border-radius: 14px;
+    }
+}
+
+/* Small screens */
+@media (max-width: 420px) {
+    .faqs-section { padding: 2rem 0.6rem; }
+    .faqs-title { font-size: 1.5rem; }
+    .faq-question { padding: 14px 16px; font-size: 1rem; }
+    .faq-question::after { font-size: 1.6rem; }
+    .faq-answer p { font-size: 0.96rem; }
 }
 
 @media (min-width: 768px) {

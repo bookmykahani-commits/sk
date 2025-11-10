@@ -198,3 +198,77 @@ $(document).on("click", "#send-it", function() {
             .removeClass("hide");
     });
 
+// FAQS
+(function () {
+    // Setup accordion behavior
+    const faqButtons = document.querySelectorAll('.faq-question');
+
+    faqButtons.forEach(button => {
+        const answerId = button.getAttribute('aria-controls');
+        const answerEl = document.getElementById(answerId);
+
+        // ensure the answer has aria-hidden initially
+        answerEl.setAttribute('aria-hidden', 'true');
+
+        // click handler
+        button.addEventListener('click', () => toggleFaq(button, answerEl));
+
+        // keyboard support: Enter and Space toggle
+        button.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleFaq(button, answerEl);
+            }
+        });
+    });
+
+    function toggleFaq(button, panel) {
+        const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+        if (isOpen) {
+            // close
+            button.setAttribute('aria-expanded', 'false');
+            panel.setAttribute('aria-hidden', 'true');
+            panel.classList.remove('open');
+
+            // collapse with smooth animation: set max-height to current then to 0
+            panel.style.maxHeight = panel.scrollHeight + 'px';
+            // allow repaint before collapsing
+            requestAnimationFrame(() => {
+                panel.style.maxHeight = '0px';
+            });
+        } else {
+            // open
+            button.setAttribute('aria-expanded', 'true');
+            panel.setAttribute('aria-hidden', 'false');
+            panel.classList.add('open');
+
+            // expand: set max-height to scrollHeight
+            panel.style.maxHeight = panel.scrollHeight + 'px';
+
+            // optional: if you want only one open at a time, uncomment the following:
+            // closeOthers(button);
+        }
+    }
+
+    // Optional helper to close other open panels (uncomment if single-open desired)
+    function closeOthers(openButton) {
+        faqButtons.forEach(btn => {
+            if (btn !== openButton && btn.getAttribute('aria-expanded') === 'true') {
+                const aid = btn.getAttribute('aria-controls');
+                const pan = document.getElementById(aid);
+                btn.setAttribute('aria-expanded', 'false');
+                pan.setAttribute('aria-hidden', 'true');
+                pan.classList.remove('open');
+                pan.style.maxHeight = '0px';
+            }
+        });
+    }
+
+    // On window resize, recompute open panel max-heights so they stay correct
+    window.addEventListener('resize', () => {
+        document.querySelectorAll('.faq-answer.open').forEach(panel => {
+            panel.style.maxHeight = panel.scrollHeight + 'px';
+        });
+    });
+})();
