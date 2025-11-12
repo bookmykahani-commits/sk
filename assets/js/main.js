@@ -30,6 +30,7 @@ $(".owl-carousel").owlCarousel({
         }
     }
 });
+
 $('.client-testimonial-carousel').on('initialized.owl.carousel changed.owl.carousel refreshed.owl.carousel', function(e){
     var $dots = $(this).closest('.client-testimonial-carousel').find('.owl-dots button.owl-dot');
     $dots.each(function(i){
@@ -443,4 +444,7 @@ $(document).on("click", "#send-it", function() {
     } else {
         initReadMore();
     }
+    $('.tb-tab').click(function (){
+        initReadMore();
+    });
 })();
