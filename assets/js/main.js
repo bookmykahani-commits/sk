@@ -334,117 +334,218 @@ $(document).on("click", "#send-it", function() {
 
     function px(value){ return Math.round(value) + 'px'; }
 
-    function initReadMore() {
-        // find all episode cards and ensure wrapper exists
-        var cards = document.querySelectorAll('.episode-card');
-        cards.forEach(function(card){
-            var content = card.querySelector('.entry-content');
-            if(!content) return;
+    // core: create or update read-more UI for one card element
+    function setupCard(card) {
+        var content = card.querySelector('.entry-content');
+        if(!content) return;
 
-            // look for existing summary wrapper; if not, wrap direct children
-            var summary = content.querySelector('.entry-content__summary');
-            if(!summary) {
-                // create wrapper and move child nodes into it until a .readmore-btn exists or end
-                summary = document.createElement('div');
-                summary.className = 'entry-content__summary';
-                // move all children except existing .readmore-btn (if any)
-                while (content.firstChild) {
-                    // keep buttons out if already present
-                    if (content.firstChild.classList && content.firstChild.classList.contains('readmore-btn')) break;
-                    summary.appendChild(content.firstChild);
-                }
-                content.insertBefore(summary, content.firstChild);
+        var summary = content.querySelector('.entry-content__summary');
+        if(!summary) {
+            summary = document.createElement('div');
+            summary.className = 'entry-content__summary';
+            while (content.firstChild) {
+                if (content.firstChild.classList && content.firstChild.classList.contains('readmore-btn')) break;
+                summary.appendChild(content.firstChild);
+            }
+            content.insertBefore(summary, content.firstChild);
+        }
+
+        var btn = content.querySelector('.readmore-btn');
+        if(!btn) {
+            btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'readmore-btn button button-small button-color button-filled';
+            btn.setAttribute('aria-expanded', 'false');
+            btn.innerHTML = 'Read more <span class="chev">▾</span>';
+            content.appendChild(btn);
+        }
+
+        // ensure idempotent: remove previous listener by cloning
+        var newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        btn = newBtn;
+
+        function measureAndApply() {
+            // remove forced styles
+            summary.classList.remove('expanded');
+            summary.style.maxHeight = null;
+
+            // get line-height of first paragraph or fallback
+            var firstChild = summary.querySelector('p') || summary.firstElementChild || summary;
+            var cs = window.getComputedStyle(firstChild);
+            var lineHeight = parseFloat(cs.lineHeight);
+            if (isNaN(lineHeight)) {
+                var fs = parseFloat(cs.fontSize) || 15;
+                lineHeight = fs * 1.6;
             }
 
-            // create or reuse button
-            var btn = content.querySelector('.readmore-btn');
-            if(!btn) {
-                btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'readmore-btn button button-small button-color button-filled';
+            var collapsedLines = getCollapsedLines();
+            summary.setAttribute('data-collapsed-lines', collapsedLines);
+
+            var collapsedHeight = Math.round(lineHeight * collapsedLines);
+            var fullHeight = summary.scrollHeight;
+
+            if (fullHeight > collapsedHeight + 4) {
+                summary.style.maxHeight = px(collapsedHeight);
+                btn.style.display = 'inline-block';
+                btn.setAttribute('aria-hidden', 'false');
+                btn.setAttribute('data-collapsed-height', collapsedHeight);
+                btn.setAttribute('data-full-height', fullHeight);
+            } else {
+                summary.style.maxHeight = px(fullHeight);
+                summary.classList.remove('expanded');
+                btn.style.display = 'none';
+                btn.setAttribute('aria-hidden', 'true');
+            }
+        }
+
+        btn.addEventListener('click', function(){
+            var isExpanded = summary.classList.toggle('expanded');
+            if (isExpanded) {
+                var fullH = btn.getAttribute('data-full-height') || summary.scrollHeight;
+                summary.style.maxHeight = px(fullH);
+                btn.setAttribute('aria-expanded', 'true');
+                btn.innerHTML = 'Show less <span class="chev">▾</span>';
+            } else {
+                var collH = btn.getAttribute('data-collapsed-height') || (getCollapsedLines()*16*1.6);
+                summary.style.maxHeight = px(collH);
                 btn.setAttribute('aria-expanded', 'false');
                 btn.innerHTML = 'Read more <span class="chev">▾</span>';
-                content.appendChild(btn);
             }
+        });
 
-            // measure whether text overflows collapsed height
-            function update() {
-                // reset any forced styles for measurement
-                summary.classList.remove('expanded');
-                summary.style.maxHeight = null;
+        // expose a per-card updater
+        return measureAndApply;
+    }
 
-                // Compute line-height of first child paragraph or summary
-                var firstChild = summary.querySelector('p') || summary.firstElementChild;
-                var cs = window.getComputedStyle(firstChild || summary);
-                var lineHeight = parseFloat(cs.lineHeight);
-                if (isNaN(lineHeight)) {
-                    // fallback to font-size * 1.4
-                    var fs = parseFloat(cs.fontSize) || 15;
-                    lineHeight = fs * 1.6;
-                }
+    // initialize all cards and collect their updater functions
+    function initReadMoreForAll() {
+        var cards = Array.prototype.slice.call(document.querySelectorAll('.episode-card'));
+        var updaters = [];
+        cards.forEach(function(card){
+            var updater = setupCard(card);
+            if (typeof updater === 'function') updaters.push({card: card, fn: updater});
+        });
+        return updaters;
+    }
 
-                var collapsedLines = getCollapsedLines();
-                // store for CSS rule reference (optional)
-                summary.setAttribute('data-collapsed-lines', collapsedLines);
+    // global storage of updaters
+    var storedUpdaters = initReadMoreForAll();
 
-                var collapsedHeight = Math.round(lineHeight * collapsedLines);
-                // actual content height
-                var fullHeight = summary.scrollHeight;
-
-                if (fullHeight > collapsedHeight + 4) {
-                    // content is long: apply collapsed height and show button
-                    summary.style.maxHeight = px(collapsedHeight);
-                    btn.style.display = 'inline-block';
-                    btn.setAttribute('aria-hidden', 'false');
-                    btn.setAttribute('data-collapsed-height', collapsedHeight);
-                    btn.setAttribute('data-full-height', fullHeight);
-                } else {
-                    // content small: no button, show full content
-                    summary.style.maxHeight = px(fullHeight);
-                    summary.classList.remove('expanded');
-                    btn.style.display = 'none';
-                    btn.setAttribute('aria-hidden', 'true');
-                }
-            }
-
-            // toggle on click
-            btn.addEventListener('click', function(){
-                var isExpanded = summary.classList.toggle('expanded');
-                if (isExpanded) {
-                    // expand to full height (use measured full height to animate nicely)
-                    var fullH = btn.getAttribute('data-full-height') || summary.scrollHeight;
-                    summary.style.maxHeight = px(fullH);
-                    btn.setAttribute('aria-expanded', 'true');
-                    btn.innerHTML = 'Show less <span class="chev">▾</span>';
-                } else {
-                    // collapse to collapsed height
-                    var collH = btn.getAttribute('data-collapsed-height') || (getCollapsedLines()*16*1.6);
-                    summary.style.maxHeight = px(collH);
-                    btn.setAttribute('aria-expanded', 'false');
-                    btn.innerHTML = 'Read more <span class="chev">▾</span>';
-                }
+    // convenience: update everything (useful on resize)
+    function updateAll() {
+        // re-run setup for new cards that might be added dynamically
+        storedUpdaters = initReadMoreForAll();
+        // measure after a frame so styles/layout settle
+        requestAnimationFrame(function(){
+            storedUpdaters.forEach(function(u){
+                try { u.fn(); } catch(e) { /* ignore measurement errors */ }
             });
-
-            // re-run on window resize with debounce
-            var resizeTimeout;
-            function debounceUpdate(){
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(update, 120);
-            }
-            window.addEventListener('resize', debounceUpdate);
-
-            // initial measurement
-            update();
         });
     }
 
-    // init on DOM ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initReadMore);
-    } else {
-        initReadMore();
+    // update only cards inside the currently active tab(s)
+    function updateReadMoreForActiveTab() {
+        // find visible tab-content(s) (heuristic: elements with .tab-content.active or visible)
+        var activeContents = document.querySelectorAll('.tab-content.active, .tab-content:visible');
+        // fallback: any .tab-content that is not display:none
+        if (!activeContents.length) {
+            activeContents = Array.prototype.filter.call(document.querySelectorAll('.tab-content'), function(el){
+                return (el.offsetParent !== null); // visible check
+            });
+        }
+        // measure their cards
+        requestAnimationFrame(function(){
+            activeContents.forEach(function(tc){
+                var cards = tc.querySelectorAll('.episode-card');
+                cards.forEach(function(card){
+                    // find stored updater for this card
+                    var upd = storedUpdaters.find(function(u){ return u.card === card; });
+                    if (upd && typeof upd.fn === 'function') {
+                        try { upd.fn(); } catch(e){}
+                    } else {
+                        // if not found (new card), setup and measure
+                        var newUpdater = setupCard(card);
+                        if (newUpdater) {
+                            storedUpdaters.push({card: card, fn: newUpdater});
+                            try { newUpdater(); } catch(e){}
+                        }
+                    }
+                });
+            });
+        });
     }
-    $('.tb-tab').click(function (){
-        initReadMore();
+
+    // wire resize with debounce
+    var resizeTimeout;
+    window.addEventListener('resize', function(){
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(updateAll, 120);
     });
+
+    // Try to detect tab activation in multiple ways:
+
+    // 1) If using Bootstrap tabs, use shown.bs.tab event
+    document.addEventListener('shown.bs.tab', function(){ updateReadMoreForActiveTab(); }, true);
+
+    // 2) If your tabs are simple li/.tb-tab clicks (your original), run after click + slight delay
+    document.addEventListener('click', function(e){
+        var li = e.target.closest && e.target.closest('.tb-tab');
+        if (li) {
+            // measure after DOM updates from tab logic — a frame or two later
+            requestAnimationFrame(function(){
+                // second frame if a JS tab system toggles classes asynchronously
+                requestAnimationFrame(updateReadMoreForActiveTab);
+            });
+        }
+    }, true);
+
+    // 3) MutationObserver fallback: watch for class changes on the tab container
+    var tabContainer = document.querySelector('.tab-container');
+    if (tabContainer && window.MutationObserver) {
+        var mo = new MutationObserver(function(mutations){
+            mutations.forEach(function(m){
+                // if nodes changed or attributes changed, attempt update for active tab
+                if (m.type === 'attributes' || m.addedNodes.length || m.removedNodes.length) {
+                    // small timeout to allow other code to finish switching
+                    setTimeout(updateReadMoreForActiveTab, 50);
+                }
+            });
+        });
+        mo.observe(tabContainer, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style'] });
+    }
+
+    // Expose function for manual calls (if needed)
+    window.updateReadMoreForActiveTab = updateReadMoreForActiveTab;
+    window.updateReadMoreAll = updateAll;
+
+    // Initial measurement on DOM ready (or immediate if already loaded)
+    function readyInit(){
+        // do an initial measurement after layout is stable
+        requestAnimationFrame(function(){
+            requestAnimationFrame(updateReadMoreForActiveTab);
+        });
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', readyInit);
+    } else {
+        readyInit();
+    }
+
 })();
+function clearSummariesInPanel(panel){
+    panel.querySelectorAll('.entry-content__summary').forEach(function(s){
+        s.style.maxHeight = null;
+        s.classList.remove('expanded');
+    });
+}
+document.querySelectorAll('.tb-tab').forEach(function(li){
+    li.addEventListener('click', function(){
+        var targetSelector = li.querySelector('a').getAttribute('href');
+        var panel = document.querySelector(targetSelector);
+        requestAnimationFrame(function(){
+            clearSummariesInPanel(panel);
+            window.updateReadMoreForActiveTab && window.updateReadMoreForActiveTab();
+        });
+    });
+});

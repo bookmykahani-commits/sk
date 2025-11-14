@@ -1119,3 +1119,48 @@ a.close-chat {
 
 /* Keep paragraphs readable */
 .entry-content__summary p { margin: 0 0 0.75em 0; color: #FFFFFF; font-size: 15px; line-height: 1.6; }
+/* Container: horizontally scrollable flex row */
+.tabs {
+    display: flex;              /* align items in a row */
+    flex-wrap: nowrap;          /* don't wrap to next line */
+    overflow-x: auto;           /* allow horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* smooth momentum on iOS */
+    gap: 18px;                  /* spacing between tabs (adjust) */
+    padding: 0 12px;            /* optional side padding */
+    margin: 0;
+    list-style: none;
+}
+
+/* Each tab should not shrink — keeps readable width */
+.tb-tab {
+    flex: 0 0 auto;             /* width fits content, doesn't shrink */
+    white-space: nowrap;        /* prevent internal wrapping */
+}
+
+/* Anchor styling (adjust to match your theme) */
+.tb-tab a {
+    display: inline-block;
+    padding: 10px 6px;
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Active state */
+.tb-tab.active a {
+    font-weight: 700;
+    /* keep existing underline/indicator styles as needed */
+}
+
+/* Optional: hide heavy native scrollbar but keep scrolling usable */
+.tabs {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: rgba(255,255,255,0.12) transparent;
+}
+.tabs::-webkit-scrollbar { height: 8px; }
+.tabs::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 8px; }
+
+/* Optional: make the active tab more visible on small screens */
+@media (max-width: 640px) {
+    .tabs { gap: 12px; padding: 0 8px; }
+    .tb-tab a { padding: 8px 6px; font-size: 14px; }
+}
